@@ -38,20 +38,6 @@ FJMUModelUpdater >> create: aFamixClass [
 ]
 
 { #category : #'model - update' }
-FJMUModelUpdater >> createFamixAnnotationInstanceFromFastAnnotation: fastAnnotation [
-
-	(self famixModel allWithType: FamixJavaAnnotationType)
-		detect: [ :famixAnnotationType | 
-			famixAnnotationType name = fastAnnotation expression name ]
-		ifOne: [ :annotationType | 
-			| annotationInstance |
-			annotationInstance := self create: FamixJavaAnnotationInstance.
-			annotationInstance annotationType: annotationType.
-			^ annotationInstance ]
-		ifNone: [ ^ nil ]
-]
-
-{ #category : #'model - update' }
 FJMUModelUpdater >> createFamixMethodFromFastMethod: aFastMethod [
 
 	| famixMethod |
@@ -62,19 +48,9 @@ FJMUModelUpdater >> createFamixMethodFromFastMethod: aFastMethod [
 	aFastMethod children
 		select: [ :child | child isKindOf: FASTJavaAnnotation ]
 		thenDo: [ :fastAnnotation | 
-			(self createFamixAnnotationInstanceFromFastAnnotation:
-				 fastAnnotation) ifNotNil: [ :annotationInstance | 
+			(fastAnnotation accept: self) ifNotNil: [ :annotationInstance | 
 				famixMethod addAnnotationInstance: annotationInstance ] ].
 	^ famixMethod
-]
-
-{ #category : #'model - update' }
-FJMUModelUpdater >> createFamixParameterFromFastParameter: fastParam [
-
-	| famixParam |
-	famixParam := self create: FamixJavaParameter.
-	famixParam name: fastParam variable name.
-	^ famixParam
 ]
 
 { #category : #accessing }
@@ -118,6 +94,20 @@ FJMUModelUpdater >> update [
 	self addMissingMethods.
 	self famixEntity sourceAnchor startPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne startPos.
 	self famixEntity sourceAnchor endPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne endPos.
+]
+
+{ #category : #'model - update' }
+FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
+
+	(self famixModel allWithType: FamixJavaAnnotationType)
+		detect: [ :famixAnnotationType | 
+			famixAnnotationType name = aFASTJavaAnnotation expression name ]
+		ifOne: [ :annotationType | 
+			| annotationInstance |
+			annotationInstance := self create: FamixJavaAnnotationInstance.
+			annotationInstance annotationType: annotationType.
+			^ annotationInstance ]
+		ifNone: [ ^ nil ]
 ]
 
 { #category : #'model - update' }

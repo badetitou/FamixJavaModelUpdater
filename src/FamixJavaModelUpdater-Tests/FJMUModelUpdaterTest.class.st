@@ -19,6 +19,29 @@ FJMUModelUpdaterTest >> setUp [
 	modelUpdater famixModel: famixModel
 ]
 
+{ #category : #test }
+FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
+
+	| fastParameter famixAnnotationType |
+	fastParameter := FASTJavaAnnotation new.
+	fastParameter expression: (FASTJavaVariableExpression new
+			 name: 'AnnotationName';
+			 yourself).
+	famixAnnotationType := FamixJavaAnnotationType new
+		                       name: 'AnnotationName';
+		                       yourself.
+	famixModel add: famixAnnotationType.
+	fastParameter accept: modelUpdater.
+	self
+		assert: (famixModel allWithType: FamixJavaAnnotationInstance) size
+		equals: 1.
+	self
+		assert:
+			(famixModel allWithType: FamixJavaAnnotationInstance) anyOne
+				annotationType
+		equals: famixAnnotationType
+]
+
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 
