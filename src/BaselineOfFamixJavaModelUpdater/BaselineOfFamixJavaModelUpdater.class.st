@@ -31,5 +31,8 @@ BaselineOfFamixJavaModelUpdater >> definePackages: spec [
 
 	spec
 		package: 'FamixJavaModelUpdater'
-		with: [ spec requires: #( 'FASTJava' ) ]
+		with: [ spec requires: #( 'FASTJava' ) ].
+	spec
+		package: 'FamixJavaModelUpdater-Tests'
+		with: [ spec requires: #( 'FamixJavaModelUpdater' ) ]
 ]

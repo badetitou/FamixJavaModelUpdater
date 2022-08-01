@@ -11,7 +11,7 @@ To use it:
 "
 Class {
 	#name : #FJMUModelUpdater,
-	#superclass : #Object,
+	#superclass : #FASTJavaVisitor,
 	#instVars : [
 		'fastModel',
 		'famixModel',
@@ -58,8 +58,7 @@ FJMUModelUpdater >> createFamixMethodFromFastMethod: aFastMethod [
 	famixMethod := self create: FamixJavaMethod.
 	famixMethod name: aFastMethod name.
 	aFastMethod parameters do: [ :fastParam | 
-		famixMethod addParameter:
-			(self createFamixParameterFromFastParameter: fastParam) ].
+		famixMethod addParameter: (fastParam accept: self) ].
 	aFastMethod children
 		select: [ :child | child isKindOf: FASTJavaAnnotation ]
 		thenDo: [ :fastAnnotation | 
@@ -119,4 +118,13 @@ FJMUModelUpdater >> update [
 	self addMissingMethods.
 	self famixEntity sourceAnchor startPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne startPos.
 	self famixEntity sourceAnchor endPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne endPos.
+]
+
+{ #category : #'model - update' }
+FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
+
+	| famixParam |
+	famixParam := self create: FamixJavaParameter.
+	famixParam name: aFASTJavaParameter variable name.
+	^ famixParam
 ]
