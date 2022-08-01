@@ -23,34 +23,15 @@ Class {
 { #category : #'model - update' }
 FJMUModelUpdater >> addMissingMethods [
 
-	self famixEntity methods copy do: [:m | m parentType: nil].
-	(self fastModel allWithType: FASTJavaMethodEntity) do: [ :method |
-		self famixEntity addMethod:
-			(self createFamixMethodFromFastMethod: method) ].
-
-
+	self famixEntity methods copy do: [ :m | m parentType: nil ].
+	(self fastModel allWithType: FASTJavaMethodEntity) do: [ :method | 
+		self famixEntity addMethod: (method accept: self) ]
 ]
 
 { #category : #'model - update' }
 FJMUModelUpdater >> create: aFamixClass [
 
 	^ self famixModel add: aFamixClass new
-]
-
-{ #category : #'model - update' }
-FJMUModelUpdater >> createFamixMethodFromFastMethod: aFastMethod [
-
-	| famixMethod |
-	famixMethod := self create: FamixJavaMethod.
-	famixMethod name: aFastMethod name.
-	aFastMethod parameters do: [ :fastParam | 
-		famixMethod addParameter: (fastParam accept: self) ].
-	aFastMethod children
-		select: [ :child | child isKindOf: FASTJavaAnnotation ]
-		thenDo: [ :fastAnnotation | 
-			(fastAnnotation accept: self) ifNotNil: [ :annotationInstance | 
-				famixMethod addAnnotationInstance: annotationInstance ] ].
-	^ famixMethod
 ]
 
 { #category : #accessing }
@@ -108,6 +89,22 @@ FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 			annotationInstance annotationType: annotationType.
 			^ annotationInstance ]
 		ifNone: [ ^ nil ]
+]
+
+{ #category : #'model - update' }
+FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
+
+	| famixMethod |
+	famixMethod := self create: FamixJavaMethod.
+	famixMethod name: aFastMethod name.
+	aFastMethod parameters do: [ :fastParam | 
+		famixMethod addParameter: (fastParam accept: self) ].
+	aFastMethod children
+		select: [ :child | child isKindOf: FASTJavaAnnotation ]
+		thenDo: [ :fastAnnotation | 
+			(fastAnnotation accept: self) ifNotNil: [ :annotationInstance | 
+				famixMethod addAnnotationInstance: annotationInstance ] ].
+	^ famixMethod
 ]
 
 { #category : #'model - update' }

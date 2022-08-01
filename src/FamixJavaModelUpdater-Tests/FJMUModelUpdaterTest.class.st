@@ -42,6 +42,17 @@ FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 		equals: famixAnnotationType
 ]
 
+{ #category : #test }
+FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
+
+	| fastMethod |
+	fastMethod := FASTJavaMethodEntity new.
+	fastMethod name: 'methodName'.
+	fastMethod accept: modelUpdater.
+	self assert: famixModel anyOne class equals: FamixJavaMethod.
+	self assert: famixModel anyOne name equals: 'methodName'
+]
+
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 
