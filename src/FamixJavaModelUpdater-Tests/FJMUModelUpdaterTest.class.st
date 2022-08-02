@@ -19,7 +19,7 @@ FJMUModelUpdaterTest >> setUp [
 	modelUpdater famixModel: famixModel
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 
 	| fastParameter famixAnnotationType |
@@ -42,7 +42,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 		equals: famixAnnotationType
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 
 	| fastMethod |
