@@ -42,6 +42,21 @@ FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 		equals: famixAnnotationType
 ]
 
+{ #category : #test }
+FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
+
+	| fastClassDeclaration |
+	fastClassDeclaration := FASTJavaClassDeclaration new.
+	fastClassDeclaration
+		name: 'MyClass';
+		yourself.
+	fastClassDeclaration accept: modelUpdater.
+	self assert: (famixModel allWithType: FamixJavaClass) size equals: 1.
+	self
+		assert: (famixModel allWithType: FamixJavaClass) anyOne name
+		equals: 'MyClass'
+]
+
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 

@@ -12,26 +12,44 @@ To use it:
 Class {
 	#name : #FJMUModelUpdater,
 	#superclass : #FASTJavaVisitor,
+	#classTraits : 'FamixJavaVisitor classTrait',
 	#instVars : [
 		'fastModel',
 		'famixModel',
-		'famixEntity'
+		'famixEntity',
+		'cleaner',
+		'fileAnchorPath'
 	],
 	#category : #FamixJavaModelUpdater
 }
 
-{ #category : #'model - update' }
-FJMUModelUpdater >> addMissingMethods [
+{ #category : #accessing }
+FJMUModelUpdater >> cleaner [
 
-	self famixEntity methods copy do: [ :m | m parentType: nil ].
-	(self fastModel allWithType: FASTJavaMethodEntity) do: [ :method | 
-		self famixEntity addMethod: (method accept: self) ]
+	^ cleaner
 ]
 
-{ #category : #'model - update' }
+{ #category : #accessing }
+FJMUModelUpdater >> cleaner: anObject [
+
+	cleaner := anObject
+]
+
+{ #category : #'model - create' }
 FJMUModelUpdater >> create: aFamixClass [
 
 	^ self famixModel add: aFamixClass new
+]
+
+{ #category : #'model - create' }
+FJMUModelUpdater >> create: aFamixClass from: aFastJavaEntity [
+
+	| entity |
+	entity := self create: aFamixClass.
+	self fileAnchorPath ifNotNil: [ :famixSourceAnchor |
+		entity sourceAnchor:
+			(self generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEntity) ].
+	^ entity
 ]
 
 { #category : #accessing }
@@ -70,11 +88,47 @@ FJMUModelUpdater >> fastModel: anObject [
 	fastModel := anObject
 ]
 
+{ #category : #accessing }
+FJMUModelUpdater >> fileAnchorPath [
+
+	^ fileAnchorPath
+]
+
+{ #category : #accessing }
+FJMUModelUpdater >> fileAnchorPath: anObject [
+
+	fileAnchorPath := anObject
+]
+
+{ #category : #'model - create' }
+FJMUModelUpdater >> generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEntity [
+
+	^ (self create: FamixJavaIndexedFileAnchor)
+		  startPos: aFastJavaEntity startPos;
+		  endPos: aFastJavaEntity endPos;
+		  fileName: famixSourceAnchor;
+		  yourself
+]
+
+{ #category : #accessing }
+FJMUModelUpdater >> initialize [
+	cleaner := FJMUModelCleaner new
+]
+
 { #category : #'model - update' }
 FJMUModelUpdater >> update [
-	self addMissingMethods.
-	self famixEntity sourceAnchor startPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne startPos.
-	self famixEntity sourceAnchor endPos: (self fastModel allWithType: FASTJavaClassDeclaration) anyOne endPos.
+
+	| mainFastClassDeclaration newlyCreatedEntity |
+	mainFastClassDeclaration := (self fastModel allWithType:
+		                             FASTJavaClassDeclaration) detect: [ 
+		                            :classDecl | classDecl parentNode isNil ].
+	self cleaner clean: famixEntity.
+	newlyCreatedEntity := mainFastClassDeclaration accept: self.
+
+	"self famixEntity sourceAnchor startPos:
+		mainFastClassDeclaration startPos.
+	self famixEntity sourceAnchor endPos: mainFastClassDeclaration endPos"
+	^ newlyCreatedEntity
 ]
 
 { #category : #'model - update' }
@@ -85,17 +139,30 @@ FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 			famixAnnotationType name = aFASTJavaAnnotation expression name ]
 		ifOne: [ :annotationType | 
 			| annotationInstance |
-			annotationInstance := self create: FamixJavaAnnotationInstance.
+			annotationInstance := self create: FamixJavaAnnotationInstance from: aFASTJavaAnnotation.
 			annotationInstance annotationType: annotationType.
 			^ annotationInstance ]
 		ifNone: [ ^ nil ]
 ]
 
 { #category : #'model - update' }
+FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
+
+	| famixClass |
+	famixClass := self create: FamixJavaClass from: aFastJavaClassDeclaration.
+	famixClass name: aFastJavaClassDeclaration name.
+
+	(aFastJavaClassDeclaration declarations select: [ :decl | 
+		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method | 
+		famixClass addMethod: (method accept: self) ].
+	^ famixClass
+]
+
+{ #category : #'model - update' }
 FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 
 	| famixMethod |
-	famixMethod := self create: FamixJavaMethod.
+	famixMethod := self create: FamixJavaMethod from: aFastMethod.
 	famixMethod name: aFastMethod name.
 	aFastMethod parameters do: [ :fastParam | 
 		famixMethod addParameter: (fastParam accept: self) ].
@@ -111,7 +178,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
 
 	| famixParam |
-	famixParam := self create: FamixJavaParameter.
+	famixParam := self create: FamixJavaParameter from: aFASTJavaParameter.
 	famixParam name: aFASTJavaParameter variable name.
 	^ famixParam
 ]
