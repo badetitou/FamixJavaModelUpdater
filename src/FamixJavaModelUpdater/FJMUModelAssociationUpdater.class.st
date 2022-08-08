@@ -79,6 +79,19 @@ FJMUModelAssociationUpdater >> update [
 ]
 
 { #category : #'model - update' }
+FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
+
+	aFASTJavaFieldAccess famixVariable ifNotNil: [ :famixVariable | 
+		| famixAccess |
+		famixAccess := self
+			               create: FamixJavaAccess
+			               from: aFASTJavaFieldAccess.
+		famixAccess variable: famixVariable.
+		famixAccess accessor:
+			(self resolveFamixScopeContainerOf: aFASTJavaFieldAccess) ]
+]
+
+{ #category : #'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaTypeExpression: aFASTJavaTypeExpression [
 	self flag: #'Not supported yet'
 ]
@@ -88,6 +101,7 @@ FJMUModelAssociationUpdater >> visitFASTTVariableExpression: aFASTVariableExpres
 
 	(aFASTVariableExpression parentNode isKindOf:
 		 FASTJavaVariableDeclarator) ifTrue: [ ^ self ].
+
 	aFASTVariableExpression famixVariable ifNotNil: [ :famixVariable | 
 		| famixAccess |
 		famixAccess := self

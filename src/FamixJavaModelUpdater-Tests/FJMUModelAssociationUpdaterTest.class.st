@@ -20,6 +20,28 @@ FJMUModelAssociationUpdaterTest >> setUp [
 ]
 
 { #category : #test }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
+
+	| fastClassDeclaration famixAccess |
+	fastClassDeclaration := JavaSmaCCProgramNodeImporterVisitor new 
+		                        parseCodeString: 'class A {
+    int i = 0;
+
+	void methodM() { 
+		this.i++;
+	}
+}'.
+	modelUpdater
+		famixModel: famixModel;
+		fastModel: fastClassDeclaration;
+		update.
+	self assert: (famixModel allWithType: FamixJavaAccess) size equals: 1.
+	famixAccess := (famixModel allWithType: FamixJavaAccess) anyOne.
+	self assert: famixAccess accessor name equals: 'methodM'.
+	self assert: famixAccess variable name equals: 'i'
+]
+
+{ #category : #test }
 FJMUModelAssociationUpdaterTest >> testVisitFASTTVariableExpression [
 
 	| fastClassDeclaration famixAccess |
