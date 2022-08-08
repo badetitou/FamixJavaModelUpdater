@@ -149,12 +149,18 @@ FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 
 	| famixClass |
-	famixClass := self create: FamixJavaClass from: aFastJavaClassDeclaration.
+	famixClass := self
+		              create: FamixJavaClass
+		              from: aFastJavaClassDeclaration.
 	famixClass name: aFastJavaClassDeclaration name.
 
 	(aFastJavaClassDeclaration declarations select: [ :decl | 
 		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method | 
 		famixClass addMethod: (method accept: self) ].
+	(aFastJavaClassDeclaration declarations select: [ :decl | 
+		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes | 
+		attributes declarators do: [ :decl | 
+			famixClass addAttribute: (decl accept: self) ] ].
 	^ famixClass
 ]
 
@@ -181,4 +187,15 @@ FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
 	famixParam := self create: FamixJavaParameter from: aFASTJavaParameter.
 	famixParam name: aFASTJavaParameter variable name.
 	^ famixParam
+]
+
+{ #category : #'model - update' }
+FJMUModelUpdater >> visitFASTJavaVariableDeclarator: aFASTJavaVariableDeclarator [
+
+	| famixAttribute |
+	famixAttribute := self
+		                  create: FamixJavaAttribute
+		                  from: aFASTJavaVariableDeclarator.
+	famixAttribute name: aFASTJavaVariableDeclarator variable name.
+	^ famixAttribute
 ]

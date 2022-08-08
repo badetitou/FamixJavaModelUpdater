@@ -20,6 +20,24 @@ FJMUModelUpdaterTest >> setUp [
 ]
 
 { #category : #tests }
+FJMUModelUpdaterTest >> testVisitFASTClassWithAttributes [
+
+	| fastClassDeclaration |
+	fastClassDeclaration := ((JavaSmaCCProgramNodeImporterVisitor new 
+		                          parseCodeString: 'class A {
+    int i = 0;
+	 boolean b = false;
+}') allWithType: FASTJavaClassDeclaration) anyOne.
+	fastClassDeclaration accept: modelUpdater.
+	self
+		assert: (famixModel allWithType: FamixJavaClass) size
+		equals: 1.
+	self
+		assert: (famixModel allWithType: FamixJavaAttribute) size
+		equals: 2
+]
+
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 
 	| fastParameter famixAnnotationType |
@@ -79,4 +97,21 @@ FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 	fastParameter accept: modelUpdater.
 	self assert: famixModel anyOne class equals: FamixJavaParameter.
 	self assert: famixModel anyOne name equals: 'variableName'
+]
+
+{ #category : #tests }
+FJMUModelUpdaterTest >> testVisitFASTJavaVariableDeclarator [
+
+	| fasVariableDeclarator |
+	fasVariableDeclarator := FASTJavaVariableDeclarator new.
+	fasVariableDeclarator variable: (FASTJavaVariableExpression new
+			 name: 'variableName';
+			 yourself).
+	fasVariableDeclarator accept: modelUpdater.
+	self
+		assert: (famixModel allWithType: FamixJavaAttribute) size
+		equals: 1.
+	self
+		assert: (famixModel allWithType: FamixJavaAttribute) anyOne name
+		equals: 'variableName'
 ]
