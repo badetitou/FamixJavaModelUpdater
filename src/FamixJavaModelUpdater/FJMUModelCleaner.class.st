@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'famixEntity'
 	],
-	#category : #FamixJavaModelUpdater
+	#category : #'FamixJavaModelUpdater-Cleaner'
 }
 
 { #category : #api }

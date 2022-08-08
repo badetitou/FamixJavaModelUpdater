@@ -8,7 +8,7 @@ Class {
 		'modelUpdater',
 		'famixModel'
 	],
-	#category : #'FamixJavaModelUpdater-Tests'
+	#category : #'FamixJavaModelUpdater-Tests-Updater'
 }
 
 { #category : #running }

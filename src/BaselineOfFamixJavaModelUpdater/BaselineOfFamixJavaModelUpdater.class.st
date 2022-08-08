@@ -19,7 +19,10 @@ BaselineOfFamixJavaModelUpdater >> defineDependencies: spec [
 	spec baseline: 'FASTJava' with: [ 
 		spec
 			loads: #( 'smacc' 'visitor' );
-			repository: 'github://moosetechnology/FAST-Java:v2/src' ]
+			repository: 'github://moosetechnology/FAST-Java:v2/src' ].
+	spec baseline: 'Carrefour' with: [ 
+		spec
+			repository: 'github://badetitou/Carrefour:v3/src' ]
 ]
 
 { #category : #baselines }
@@ -31,7 +34,7 @@ BaselineOfFamixJavaModelUpdater >> definePackages: spec [
 
 	spec
 		package: 'FamixJavaModelUpdater'
-		with: [ spec requires: #( 'FASTJava' ) ].
+		with: [ spec requires: #( 'FASTJava' 'Carrefour' ) ].
 	spec
 		package: 'FamixJavaModelUpdater-Tests'
 		with: [ spec requires: #( 'FamixJavaModelUpdater' ) ]

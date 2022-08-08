@@ -1,5 +1,9 @@
 "
 This is the main class of the FamixJava Model Updater project.
+
+I resolves the structure of the files.
+Then, it calls the association updater dedicated to resolves associations between elements
+
 To use it:
 
 - create a new instance
@@ -12,15 +16,14 @@ To use it:
 Class {
 	#name : #FJMUModelUpdater,
 	#superclass : #FASTJavaVisitor,
-	#classTraits : 'FamixJavaVisitor classTrait',
+	#traits : 'TFJMUEntityFactory',
+	#classTraits : 'TFJMUEntityFactory classTrait',
 	#instVars : [
 		'fastModel',
-		'famixModel',
 		'famixEntity',
-		'cleaner',
-		'fileAnchorPath'
+		'cleaner'
 	],
-	#category : #FamixJavaModelUpdater
+	#category : #'FamixJavaModelUpdater-Updater'
 }
 
 { #category : #accessing }
@@ -33,23 +36,6 @@ FJMUModelUpdater >> cleaner [
 FJMUModelUpdater >> cleaner: anObject [
 
 	cleaner := anObject
-]
-
-{ #category : #'model - create' }
-FJMUModelUpdater >> create: aFamixClass [
-
-	^ self famixModel add: aFamixClass new
-]
-
-{ #category : #'model - create' }
-FJMUModelUpdater >> create: aFamixClass from: aFastJavaEntity [
-
-	| entity |
-	entity := self create: aFamixClass.
-	self fileAnchorPath ifNotNil: [ :famixSourceAnchor |
-		entity sourceAnchor:
-			(self generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEntity) ].
-	^ entity
 ]
 
 { #category : #accessing }
@@ -65,18 +51,6 @@ FJMUModelUpdater >> famixEntity: anObject [
 ]
 
 { #category : #accessing }
-FJMUModelUpdater >> famixModel [
-
-	^ famixModel
-]
-
-{ #category : #accessing }
-FJMUModelUpdater >> famixModel: anObject [
-
-	famixModel := anObject
-]
-
-{ #category : #accessing }
 FJMUModelUpdater >> fastModel [
 
 	^ fastModel
@@ -86,28 +60,6 @@ FJMUModelUpdater >> fastModel [
 FJMUModelUpdater >> fastModel: anObject [
 
 	fastModel := anObject
-]
-
-{ #category : #accessing }
-FJMUModelUpdater >> fileAnchorPath [
-
-	^ fileAnchorPath
-]
-
-{ #category : #accessing }
-FJMUModelUpdater >> fileAnchorPath: anObject [
-
-	fileAnchorPath := anObject
-]
-
-{ #category : #'model - create' }
-FJMUModelUpdater >> generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEntity [
-
-	^ (self create: FamixJavaIndexedFileAnchor)
-		  startPos: aFastJavaEntity startPos;
-		  endPos: aFastJavaEntity endPos;
-		  fileName: famixSourceAnchor;
-		  yourself
 ]
 
 { #category : #accessing }
@@ -125,10 +77,20 @@ FJMUModelUpdater >> update [
 	self cleaner clean: famixEntity.
 	newlyCreatedEntity := mainFastClassDeclaration accept: self.
 
-	"self famixEntity sourceAnchor startPos:
-		mainFastClassDeclaration startPos.
-	self famixEntity sourceAnchor endPos: mainFastClassDeclaration endPos"
+	self updateAssociationFor: newlyCreatedEntity.
 	^ newlyCreatedEntity
+]
+
+{ #category : #'model - update' }
+FJMUModelUpdater >> updateAssociationFor: newlyCreatedEntity [
+
+	FJMUModelAssociationUpdater new
+		famixModel: newlyCreatedEntity mooseModel;
+		fastModel: self fastModel;
+		famixEntity: famixEntity;
+		fileAnchorPath: self fileAnchorPath;
+		newFamixEntity: newlyCreatedEntity;
+		update
 ]
 
 { #category : #'model - update' }
@@ -177,6 +139,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 		thenDo: [ :fastAnnotation | 
 			(fastAnnotation accept: self) ifNotNil: [ :annotationInstance | 
 				famixMethod addAnnotationInstance: annotationInstance ] ].
+	aFastMethod famixMethod: famixMethod.
 	^ famixMethod
 ]
 
