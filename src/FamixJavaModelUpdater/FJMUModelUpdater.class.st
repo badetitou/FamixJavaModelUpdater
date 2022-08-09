@@ -124,6 +124,15 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes | 
 		attributes declarators do: [ :decl | 
 			famixClass addAttribute: (decl accept: self) ] ].
+
+	aFastJavaClassDeclaration superclass ifNotNil: [ :superclass | 
+		famixClass mooseModel allModelClasses asOrderedCollection
+			detect: [ :class | class name = superclass typeName name ]
+			ifOne: [ :class | 
+				(self create: FamixJavaInheritance)
+					subclass: famixClass;
+					superclass: class ] ].
+
 	^ famixClass
 ]
 
