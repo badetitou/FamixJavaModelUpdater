@@ -84,7 +84,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaClassDeclaration: aFASTJavaClassDecl
 	"resolve declaredType"
 
 	famixEntity ifNotNil: [ :originalFamixEntity | 
-		originalFamixEntity typedEntities do: [ :typedEntity | 
+		originalFamixEntity typedEntities copy do: [ :typedEntity | 
 			typedEntity declaredType:
 				aFASTJavaClassDeclaration famixTypeDefinition ] ].
 	super visitFASTJavaClassDeclaration: aFASTJavaClassDeclaration

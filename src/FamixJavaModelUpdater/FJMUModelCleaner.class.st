@@ -17,13 +17,31 @@ FJMUModelCleaner >> clean: aFamixEntity [
 		aFamixEntity accept: self ]
 ]
 
+{ #category : #visiting }
+FJMUModelCleaner >> visitAttribute: aFamixJavaAttribute [
+
+	aFamixJavaAttribute mooseModel remove: aFamixJavaAttribute
+]
+
 { #category : #api }
 FJMUModelCleaner >> visitClass: aFamixJavaClass [
 
-	aFamixJavaClass methods copy do: [ :m | m parentType: nil ]
+	aFamixJavaClass methods copy do: [ :m | 
+		m parentType: nil.
+		m accept: self ].
+	aFamixJavaClass attributes copy do: [ :att | 
+		att parentType: nil.
+		att accept: self ].
+	aFamixJavaClass mooseModel remove: aFamixJavaClass
 ]
 
 { #category : #api }
 FJMUModelCleaner >> visitEntity: aFamixJavaEntity [
 	^ nil
+]
+
+{ #category : #visiting }
+FJMUModelCleaner >> visitMethod: aFamixJavaMethod [
+
+	aFamixJavaMethod mooseModel remove: aFamixJavaMethod
 ]
