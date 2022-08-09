@@ -79,6 +79,18 @@ FJMUModelAssociationUpdater >> update [
 ]
 
 { #category : #'model - update' }
+FJMUModelAssociationUpdater >> visitFASTJavaClassDeclaration: aFASTJavaClassDeclaration [
+
+	"resolve declaredType"
+
+	famixEntity ifNotNil: [ :originalFamixEntity | 
+		originalFamixEntity typedEntities do: [ :typedEntity | 
+			typedEntity declaredType:
+				aFASTJavaClassDeclaration famixTypeDefinition ] ].
+	super visitFASTJavaClassDeclaration: aFASTJavaClassDeclaration
+]
+
+{ #category : #'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 
 	aFASTJavaFieldAccess famixVariable ifNotNil: [ :famixVariable | 

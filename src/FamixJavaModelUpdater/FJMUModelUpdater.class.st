@@ -74,10 +74,10 @@ FJMUModelUpdater >> update [
 	mainFastClassDeclaration := (self fastModel allWithType:
 		                             FASTJavaClassDeclaration) detect: [ 
 		                            :classDecl | classDecl parentNode isNil ].
-	self cleaner clean: famixEntity.
 	newlyCreatedEntity := mainFastClassDeclaration accept: self.
 
 	self updateAssociationFor: newlyCreatedEntity.
+	self cleaner clean: famixEntity.
 	^ newlyCreatedEntity
 ]
 
@@ -115,6 +115,7 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 		              create: FamixJavaClass
 		              from: aFastJavaClassDeclaration.
 	famixClass name: aFastJavaClassDeclaration name.
+	famixClass fastTypeDefinition: aFastJavaClassDeclaration.
 
 	(aFastJavaClassDeclaration declarations select: [ :decl | 
 		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method | 

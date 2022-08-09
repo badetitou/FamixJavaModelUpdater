@@ -20,6 +20,44 @@ FJMUModelAssociationUpdaterTest >> setUp [
 ]
 
 { #category : #test }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredTypeMethod [
+
+	| externalFamixClass externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity |
+	externalFamixClass := FamixJavaClass new
+		                      name: 'ExternalFamixJavaClass';
+		                      yourself.
+	externalFamixMethod := FamixJavaMethod new
+		                       name: 'externalFamixJavaMethod';
+		                       yourself.
+	externalFamixClass addMethod: externalFamixMethod.
+	myClass := FamixJavaClass new
+		           name: 'MyClass';
+		           yourself.
+	externalFamixMethod declaredType: myClass.
+	famixModel addAll: { 
+			externalFamixClass.
+			externalFamixMethod.
+			myClass }.
+	fastClassDeclaration := JavaSmaCCProgramNodeImporterVisitor new 
+		                        parseCodeString: 'class MyClass {
+
+	ExternalFamixJavaClass methodM() { 
+		return null;
+	}
+
+}'.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+
+	self
+		assert: externalFamixMethod declaredType
+		equals: newlyCreatedFamixEntity
+]
+
+{ #category : #test }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 
 	| fastClassDeclaration famixAccess |
