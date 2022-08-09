@@ -126,12 +126,29 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 			famixClass addAttribute: (decl accept: self) ] ].
 
 	aFastJavaClassDeclaration superclass ifNotNil: [ :superclass | 
-		famixClass mooseModel allModelClasses asOrderedCollection
-			detect: [ :class | class name = superclass typeName name ]
-			ifOne: [ :class | 
-				(self create: FamixJavaInheritance)
-					subclass: famixClass;
-					superclass: class ] ].
+		(aFastJavaClassDeclaration mooseModel allWithType:
+			 FASTJavaImportDeclaration)
+			detect: [ :importDeclaration | 
+				importDeclaration declarationName name = superclass typeName name ]
+			ifOne: [ :importDeclaration | 
+				famixClass mooseModel allModelPackages
+					detect: [ :pa | 
+						pa qualifiedName
+						= importDeclaration declarationName namespace fullName ]
+					ifOne: [ :package | 
+						package types
+							detect: [ :type | type name = superclass typeName name ]
+							ifOne: [ :type | 
+								(self create: FamixJavaInheritance)
+									subclass: famixClass;
+									superclass: type ] ] ]
+			ifNone: [ 
+				famixClass mooseModel allModelClasses asOrderedCollection
+					detect: [ :class | class name = superclass typeName name ]
+					ifOne: [ :class | 
+						(self create: FamixJavaInheritance)
+							subclass: famixClass;
+							superclass: class ] ] ].
 
 	^ famixClass
 ]
