@@ -20,7 +20,7 @@ FJMUModelCleaner >> clean: aFamixEntity [
 { #category : #visiting }
 FJMUModelCleaner >> visitAttribute: aFamixJavaAttribute [
 
-	aFamixJavaAttribute mooseModel remove: aFamixJavaAttribute
+	aFamixJavaAttribute mooseModel ifNotNil: [ aFamixJavaAttribute mooseModel remove: aFamixJavaAttribute ]
 ]
 
 { #category : #api }
@@ -32,7 +32,7 @@ FJMUModelCleaner >> visitClass: aFamixJavaClass [
 	aFamixJavaClass attributes copy do: [ :att | 
 		att parentType: nil.
 		att accept: self ].
-	aFamixJavaClass mooseModel remove: aFamixJavaClass
+	aFamixJavaClass mooseModel ifNotNil: [ aFamixJavaClass mooseModel remove: aFamixJavaClass ]
 ]
 
 { #category : #api }
@@ -43,5 +43,5 @@ FJMUModelCleaner >> visitEntity: aFamixJavaEntity [
 { #category : #visiting }
 FJMUModelCleaner >> visitMethod: aFamixJavaMethod [
 
-	aFamixJavaMethod mooseModel remove: aFamixJavaMethod
+	aFamixJavaMethod mooseModel ifNotNil: [ aFamixJavaMethod mooseModel remove: aFamixJavaMethod ]
 ]
