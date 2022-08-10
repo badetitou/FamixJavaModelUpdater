@@ -38,6 +38,28 @@ FJMUModelUpdaterTest >> testVisitFASTClassWithAttributes [
 ]
 
 { #category : #tests }
+FJMUModelUpdaterTest >> testVisitFASTClassWithAttributesAndModifiers [
+
+	| fastClassDeclaration |
+	fastClassDeclaration := ((JavaSmaCCProgramNodeImporterVisitor new 
+		                          parseCodeString: 'class A {
+    public int i = 0;
+	 static boolean b = false;
+}') allWithType: FASTJavaClassDeclaration) anyOne.
+	fastClassDeclaration accept: modelUpdater.
+	self assert: (famixModel allWithType: FamixJavaClass) size equals: 1.
+	self
+		assert: (famixModel allWithType: FamixJavaAttribute) size
+		equals: 2.
+	self assert:
+		((famixModel allWithType: FamixJavaAttribute) detect: [ :att | 
+			 att name = 'i' ]) isPublic.
+	self assert:
+		((famixModel allWithType: FamixJavaAttribute) detect: [ :att | 
+			 att name = 'b' ]) isClassSide
+]
+
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 
 	| fastParameter famixAnnotationType |
@@ -102,11 +124,13 @@ FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaVariableDeclarator [
 
-	| fasVariableDeclarator |
+	| fasVariableDeclarator fastVarDeclStatement |
+	fastVarDeclStatement := FASTJavaVarDeclStatement new.
 	fasVariableDeclarator := FASTJavaVariableDeclarator new.
 	fasVariableDeclarator variable: (FASTJavaVariableExpression new
 			 name: 'variableName';
 			 yourself).
+	fastVarDeclStatement addDeclarator: fasVariableDeclarator.
 	fasVariableDeclarator accept: modelUpdater.
 	self
 		assert: (famixModel allWithType: FamixJavaAttribute) size

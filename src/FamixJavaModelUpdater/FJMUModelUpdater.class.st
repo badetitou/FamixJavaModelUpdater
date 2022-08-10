@@ -187,5 +187,10 @@ FJMUModelUpdater >> visitFASTJavaVariableDeclarator: aFASTJavaVariableDeclarator
 		                  create: FamixJavaAttribute
 		                  from: aFASTJavaVariableDeclarator.
 	famixAttribute name: aFASTJavaVariableDeclarator variable name.
+	(aFASTJavaVariableDeclarator atScope: FASTJavaVarDeclStatement) anyOne modifiers do: [ :modifier | 
+		(modifier token = 'public') ifTrue: [ famixAttribute isPublic: true ].
+		(modifier token = 'final') ifTrue: [ famixAttribute isFinal: true ].
+		(modifier token = 'static') ifTrue: [ famixAttribute isClassSide: true ].
+		].
 	^ famixAttribute
 ]
