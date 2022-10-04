@@ -131,7 +131,7 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 			detect: [ :importDeclaration | 
 				importDeclaration declarationName name = superclass typeName name ]
 			ifOne: [ :importDeclaration | 
-				famixClass mooseModel allModelPackages
+				famixClass mooseModel allPackages
 					detect: [ :pa | 
 						pa qualifiedName
 						= importDeclaration declarationName namespace fullName ]
