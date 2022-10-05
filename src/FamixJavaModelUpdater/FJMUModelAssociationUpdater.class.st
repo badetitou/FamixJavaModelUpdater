@@ -104,6 +104,23 @@ FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 ]
 
 { #category : #'model - update' }
+FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInvocation [
+
+	| famixJavaInvocation |
+	famixJavaInvocation := self
+		                       create: FamixJavaInvocation
+		                       from: aFASTJavaMethodInvocation.
+	famixJavaInvocation signature:
+		(aFASTJavaMethodInvocation rootNode sourceText
+			 copyFrom: aFASTJavaMethodInvocation startPos
+			 to: aFASTJavaMethodInvocation endPos).
+	famixJavaInvocation sender: (self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
+	self halt.
+	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
+	^ famixJavaInvocation
+]
+
+{ #category : #'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaTypeExpression: aFASTJavaTypeExpression [
 	self flag: #'Not supported yet'
 ]
