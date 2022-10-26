@@ -18,7 +18,6 @@ jobs:
         smalltalk: [  Moose64-9.0, Moose64-10 ]
     name: ${{ matrix.smalltalk }}
     steps:
-      - uses: AutoModality/action-clean@v1
       - uses: actions/checkout@v2
       - uses: addnab/docker-run-action@v3
         with:
@@ -29,14 +28,12 @@ jobs:
             cd tests
             /VerveineJ-3.0.0/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
             cd ..
-            ls
-            rm semicolon_delimited_script
-            echo "ls test"
-            ls tests
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
-      - run: smalltalkci -s ${{ matrix.smalltalk }}
+      - run: |
+          /usr/bin/git log -1 --format='%H'
+          smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
         timeout-minutes: 15
       - name: Coveralls
