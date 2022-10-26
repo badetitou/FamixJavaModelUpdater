@@ -1,5 +1,5 @@
 SmalltalkCISpec {
-  #preLoading : 'ci/preLoading.st',
+  #preLoading : 'ci/preloading.st',
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'FamixJavaModelUpdater',
