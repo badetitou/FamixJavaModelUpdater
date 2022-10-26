@@ -29,7 +29,7 @@ jobs:
             /VerveineJ-3.0.0/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
             cd ..
             ls
-            git reset --hard
+            rm semicolon_delimited_script
             echo "ls test"
             ls tests
       - uses: hpi-swa/setup-smalltalkCI@v1
