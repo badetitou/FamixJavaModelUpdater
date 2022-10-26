@@ -1,7 +1,7 @@
 SmalltalkCISpec {
   #preTesting : SCICustomScript {
     #path : 'ci/pretesting.st'
-  }
+  },
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'FamixJavaModelUpdater',
