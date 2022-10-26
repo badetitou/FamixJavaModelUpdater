@@ -1,5 +1,7 @@
 # FamixJavaModelUpdater
 
+[![Coverage Status](https://coveralls.io/repos/github/badetitou/FamixJavaModelUpdater/badge.svg?branch=main)](https://coveralls.io/github/badetitou/FamixJavaModelUpdater?branch=main)
+
 I update a FamixJava model based on a FASTJava AST.
 
 ## Installation
