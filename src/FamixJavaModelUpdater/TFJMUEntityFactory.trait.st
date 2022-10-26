@@ -77,6 +77,15 @@ TFJMUEntityFactory >> retrieveClassFromModel: aClassName [
 	^ (fastModel allWithType: FASTJavaImportDeclaration)
 		  detect: [ :importDeclaration | 
 			  importDeclaration declarationName name = aClassName ]
+		  ifOne: [ :importDeclaration | 
+			  self famixModel allPackages
+				  detect: [ :pa | 
+					  pa qualifiedName
+					  = importDeclaration declarationName namespace fullName ]
+				  ifOne: [ :package | 
+					  package types
+						  detect: [ :type | type name = aClassName ]
+						  ifNone: [ nil ] ] ]
 		  ifNone: [ 
 			  self famixModel allModelClasses asOrderedCollection
 				  detect: [ :class | class name = aClassName ]
