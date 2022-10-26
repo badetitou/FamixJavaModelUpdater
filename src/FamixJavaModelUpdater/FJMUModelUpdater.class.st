@@ -136,7 +136,12 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 						(self create: FamixJavaInheritance)
 							subclass: famixClass;
 							superclass: class ] ] ].
-
+	aFastJavaClassDeclaration interfaces do: [ :interface | 
+		(self retrieveClassFromModel: interface typeName name) ifNotNil: [ 
+			:famixInterface | 
+			(self create: FamixJavaImplementation)
+				implementingClass: famixClass;
+				interface: famixInterface ] ].
 	^ famixClass
 ]
 

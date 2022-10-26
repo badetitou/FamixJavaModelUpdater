@@ -87,7 +87,7 @@ TFJMUEntityFactory >> retrieveClassFromModel: aClassName [
 						  detect: [ :type | type name = aClassName ]
 						  ifNone: [ nil ] ] ]
 		  ifNone: [ 
-			  self famixModel allModelClasses asOrderedCollection
+			  self famixModel allModelTypes  asOrderedCollection
 				  detect: [ :class | class name = aClassName ]
 				  ifNone: [ nil ] ]
 ]

@@ -97,6 +97,28 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 		equals: 'MyClass'
 ]
 
+{ #category : #test }
+FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
+
+	| originalInterface myClass fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	originalInterface := (famixModel allWithType: FamixJavaInterface) detect: [ :c | 
+		                          c name = 'MyInterface' ].
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	self
+		assert: newlyCreatedFamixEntity interfaceImplementations anyOne interface
+		equals: originalInterface
+]
+
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 

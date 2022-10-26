@@ -32,7 +32,8 @@ FJMUModelCleaner >> visitClass: aFamixJavaClass [
 	aFamixJavaClass attributes copy do: [ :att | 
 		att parentType: nil.
 		att accept: self ].
-	aFamixJavaClass mooseModel ifNotNil: [ aFamixJavaClass mooseModel remove: aFamixJavaClass ]
+	aFamixJavaClass mooseModel ifNotNil: [ 
+		aFamixJavaClass mooseModel remove: aFamixJavaClass ]
 ]
 
 { #category : #api }
