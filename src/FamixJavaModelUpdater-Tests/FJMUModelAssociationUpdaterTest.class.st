@@ -19,33 +19,20 @@ FJMUModelAssociationUpdaterTest >> setUp [
 	modelUpdater famixModel: famixModel
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredTypeMethod [
 
 	| externalFamixClass externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity |
-	externalFamixClass := FamixJavaClass new
-		                      name: 'ExternalFamixJavaClass';
-		                      yourself.
-	externalFamixMethod := FamixJavaMethod new
-		                       name: 'externalFamixJavaMethod';
-		                       yourself.
-	externalFamixClass addMethod: externalFamixMethod.
-	myClass := FamixJavaClass new
-		           name: 'MyClass';
-		           yourself.
-	externalFamixMethod declaredType: myClass.
-	famixModel addAll: { 
-			externalFamixClass.
-			externalFamixMethod.
-			myClass }.
-	fastClassDeclaration := JavaSmaCCProgramNodeImporterVisitor new 
-		                        parseCodeString: 'class MyClass {
-
-	ExternalFamixJavaClass methodM() { 
-		return null;
-	}
-
-}'.
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	externalFamixClass := famixModel allModelClasses detect: [ :c | 
+		                      c name = 'ExternalFamixJavaClass' ].
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	externalFamixMethod := famixModel allModelMethods detect: [ :c | 
+		                       c name = 'externalFamixJavaMethod' ].
+	fastClassDeclaration := myClass generateFastJava.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
