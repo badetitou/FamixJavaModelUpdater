@@ -19,7 +19,6 @@ Class {
 	#traits : 'TFJMUEntityFactory',
 	#classTraits : 'TFJMUEntityFactory classTrait',
 	#instVars : [
-		'fastModel',
 		'famixEntity',
 		'cleaner'
 	],
@@ -48,18 +47,6 @@ FJMUModelUpdater >> famixEntity [
 FJMUModelUpdater >> famixEntity: anObject [
 
 	famixEntity := anObject
-]
-
-{ #category : #accessing }
-FJMUModelUpdater >> fastModel [
-
-	^ fastModel
-]
-
-{ #category : #accessing }
-FJMUModelUpdater >> fastModel: anObject [
-
-	fastModel := anObject
 ]
 
 { #category : #accessing }
@@ -166,6 +153,13 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 		thenDo: [ :fastAnnotation | 
 			(fastAnnotation accept: self) ifNotNil: [ :annotationInstance | 
 				famixMethod addAnnotationInstance: annotationInstance ] ].
+	aFastMethod throws do: [ :throw | 
+		(self retrieveClassFromModel: throw typeName name) ifNotNil: [ 
+			:aClass | 
+			(self create: FamixJavaDeclaredException)
+				definingEntity: famixMethod;
+				exceptionClass: aClass ] ].
+
 	aFastMethod famixMethod: famixMethod.
 	^ famixMethod
 ]

@@ -12,7 +12,6 @@ Class {
 	#traits : 'TFJMUEntityFactory',
 	#classTraits : 'TFJMUEntityFactory classTrait',
 	#instVars : [
-		'fastModel',
 		'newFamixEntity',
 		'famixEntity'
 	],
@@ -29,18 +28,6 @@ FJMUModelAssociationUpdater >> famixEntity [
 FJMUModelAssociationUpdater >> famixEntity: anObject [
 
 	famixEntity := anObject
-]
-
-{ #category : #accessing }
-FJMUModelAssociationUpdater >> fastModel [
-
-	^ fastModel
-]
-
-{ #category : #accessing }
-FJMUModelAssociationUpdater >> fastModel: anObject [
-
-	fastModel := anObject
 ]
 
 { #category : #accessing }

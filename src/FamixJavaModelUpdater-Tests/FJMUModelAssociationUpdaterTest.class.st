@@ -44,6 +44,32 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredType
 		equals: newlyCreatedFamixEntity
 ]
 
+{ #category : #tests }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownException [
+
+	| originalExceptionClass method myClass fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	originalExceptionClass := famixModel allModelClasses detect: [ :c | 
+		                          c name = 'MyException' ].
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	method := famixModel allModelMethods detect: [ :c | 
+		          c name = 'methodM' ].
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	self
+		assert: method declaredExceptions anyOne exceptionClass
+		equals:
+			(newlyCreatedFamixEntity methods detect: [ :m | m name = 'methodM' ])
+				declaredExceptions anyOne exceptionClass
+]
+
 { #category : #test }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 

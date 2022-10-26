@@ -2,7 +2,8 @@ Trait {
 	#name : #TFJMUEntityFactory,
 	#instVars : [
 		'famixModel',
-		'fileAnchorPath'
+		'fileAnchorPath',
+		'fastModel'
 	],
 	#category : #'FamixJavaModelUpdater-Updater'
 }
@@ -37,6 +38,18 @@ TFJMUEntityFactory >> famixModel: anObject [
 ]
 
 { #category : #accessing }
+TFJMUEntityFactory >> fastModel [
+
+	^ fastModel
+]
+
+{ #category : #accessing }
+TFJMUEntityFactory >> fastModel: anObject [
+
+	fastModel := anObject
+]
+
+{ #category : #accessing }
 TFJMUEntityFactory >> fileAnchorPath [
 
 	^ fileAnchorPath
@@ -56,4 +69,16 @@ TFJMUEntityFactory >> generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEnt
 		  endPos: aFastJavaEntity endPos;
 		  fileName: famixSourceAnchor;
 		  yourself
+]
+
+{ #category : #'model - create' }
+TFJMUEntityFactory >> retrieveClassFromModel: aClassName [
+
+	^ (fastModel allWithType: FASTJavaImportDeclaration)
+		  detect: [ :importDeclaration | 
+			  importDeclaration declarationName name = aClassName ]
+		  ifNone: [ 
+			  self famixModel allModelClasses asOrderedCollection
+				  detect: [ :class | class name = aClassName ]
+				  ifNone: [ nil ] ]
 ]
