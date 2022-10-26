@@ -18,6 +18,7 @@ jobs:
         smalltalk: [  Moose64-9.0, Moose64-10 ]
     name: ${{ matrix.smalltalk }}
     steps:
+      - uses: AutoModality/action-clean@v1
       - uses: actions/checkout@v2
       - uses: addnab/docker-run-action@v3
         with:
