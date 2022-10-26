@@ -31,9 +31,7 @@ jobs:
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
-      - run: |
-          /usr/bin/git log -1 --format='%H'
-          smalltalkci -s ${{ matrix.smalltalk }}
+      - run: smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
         timeout-minutes: 15
       - name: Coveralls
