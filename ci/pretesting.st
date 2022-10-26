@@ -1,4 +1,4 @@
 (IceRepositoryCreator new
-    location: '/home/runner/work/FamixJavaModelUpdater/FamixJavaModelUpdater' asFileReference;
+    location: '.' asFileReference;
     subdirectory: 'src';
     createRepository) register
