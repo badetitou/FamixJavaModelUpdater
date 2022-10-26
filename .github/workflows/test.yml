@@ -19,6 +19,8 @@ jobs:
     name: ${{ matrix.smalltalk }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: addnab/docker-run-action@v3
         with:
           registry: hub.docker.io
