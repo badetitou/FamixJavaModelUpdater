@@ -29,3 +29,11 @@ FJMUModelUpdater new
   famixEntity: famixEntity;
   update
 ```
+
+## Developers
+
+You can build the `output.json` with VerveineJ with the following command.
+
+```st
+docker run -v "/path/to/FamixJavaModelUpdater/tests:/src" badetitou/verveinej:v3.0.0 -format json -o output.json -alllocals -anchor assoc .
+```
