@@ -28,6 +28,8 @@ jobs:
             cd tests
             /VerveineJ-3.0.0/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
             cd ..
+            ls
+            ls tests
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
