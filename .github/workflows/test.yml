@@ -18,6 +18,14 @@ jobs:
     name: ${{ matrix.smalltalk }}
     steps:
       - uses: actions/checkout@v2
+      - uses: addnab/docker-run-action@v3
+        with:
+          registry: hub.docker.io
+          image:  badetitou/verveinej:v3.0.0
+          options: -v ${{ github.workspace }}:/src
+          run: |
+            cd tests
+            /VerveineJ-3.0.0/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
