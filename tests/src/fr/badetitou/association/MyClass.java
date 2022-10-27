@@ -10,4 +10,9 @@ public class MyClass implements MyInterface {
 		return null;
 	}
 
+	void aMethod() {
+		int localVariable;
+		int localVariableWithInitialization = 0;
+	}
+
 }
