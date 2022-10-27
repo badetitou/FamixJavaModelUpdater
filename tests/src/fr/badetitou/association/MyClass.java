@@ -20,4 +20,9 @@ public class MyClass implements MyInterface {
 		myExternalFamixJavaClass.externalFamixJavaMethod();
 	}
 
+	void localCall() {
+		aMethod();
+	}
+
+
 }
