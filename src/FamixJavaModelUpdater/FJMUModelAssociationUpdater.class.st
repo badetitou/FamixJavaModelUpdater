@@ -104,11 +104,12 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 	parentBehavior := self resolveFamixScopeContainerOf:
 		                  aFASTJavaMethodInvocation.
 	famixJavaInvocation sender: parentBehavior.
-	aFASTJavaMethodInvocation receiver
-		ifNotNil: [ :fastInvocationReceiver | 
-			fastInvocationReceiver famixVariable ifNotNil: [ :famixVariable | 
-				famixJavaInvocation receiver: famixVariable ] ]
-		ifNil: [ 
+	(aFASTJavaMethodInvocation receiver isNotNil and: [ 
+		 aFASTJavaMethodInvocation receiver famixVariable isNotNil ])
+		ifTrue: [ 
+			famixJavaInvocation receiver:
+				aFASTJavaMethodInvocation receiver famixVariable ]
+		ifFalse: [ 
 			| anImplicitSelf |
 			anImplicitSelf := self create: FamixJavaImplicitVariable.
 			famixJavaInvocation receiver: anImplicitSelf.
