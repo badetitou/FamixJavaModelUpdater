@@ -15,4 +15,9 @@ public class MyClass implements MyInterface {
 		int localVariableWithInitialization = 0;
 	}
 
+	void aMethodWithInvocation() {
+		ExternalFamixJavaClass myExternalFamixJavaClass = new ExternalFamixJavaClass();
+		myExternalFamixJavaClass.externalFamixJavaMethod();
+	}
+
 }
