@@ -93,7 +93,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 { #category : #'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInvocation [
 
-	| famixJavaInvocation |
+	| famixJavaInvocation parentBehavior |
 	famixJavaInvocation := self
 		                       create: FamixJavaInvocation
 		                       from: aFASTJavaMethodInvocation.
@@ -101,17 +101,27 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 		(aFASTJavaMethodInvocation rootNode sourceText
 			 copyFrom: aFASTJavaMethodInvocation startPos
 			 to: aFASTJavaMethodInvocation endPos).
-	famixJavaInvocation sender:
-		(self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
-	aFASTJavaMethodInvocation receiver ifNotNil: [ 
-		:fastInvocationReceiver | 
-		fastInvocationReceiver famixVariable ifNotNil: [ :famixVariable | 
-			famixJavaInvocation receiver: famixVariable.
-			famixVariable declaredType ifNotNil: [ :candidateClass | 
-				candidateClass methods
-					detect: [ :m | m name = aFASTJavaMethodInvocation name ]
-					ifOne: [ :candidateMethod | 
-						famixJavaInvocation addCandidate: candidateMethod ] ] ] ].
+	parentBehavior := self resolveFamixScopeContainerOf:
+		                  aFASTJavaMethodInvocation.
+	famixJavaInvocation sender: parentBehavior.
+	aFASTJavaMethodInvocation receiver
+		ifNotNil: [ :fastInvocationReceiver | 
+			fastInvocationReceiver famixVariable ifNotNil: [ :famixVariable | 
+				famixJavaInvocation receiver: famixVariable ] ]
+		ifNil: [ 
+			| anImplicitSelf |
+			anImplicitSelf := self create: FamixJavaImplicitVariable.
+			famixJavaInvocation receiver: anImplicitSelf.
+			anImplicitSelf parentBehaviouralEntity: parentBehavior ].
+	((famixJavaInvocation receiver isKindOf: FamixJavaImplicitVariable)
+		 ifTrue: [ 
+		 (famixJavaInvocation receiver atScope: FamixTClass) anyOne ]
+		 ifFalse: [ famixJavaInvocation receiver declaredType ]) ifNotNil: [ 
+		:candidateClass | 
+		candidateClass allMethods
+			detect: [ :m | m name = aFASTJavaMethodInvocation name ]
+			ifOne: [ :candidateMethod | 
+				famixJavaInvocation addCandidate: candidateMethod ] ].
 
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
