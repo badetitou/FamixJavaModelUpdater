@@ -103,14 +103,15 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 			 to: aFASTJavaMethodInvocation endPos).
 	famixJavaInvocation sender:
 		(self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
-	aFASTJavaMethodInvocation receiver famixVariable ifNotNil: [ 
-		:famixVariable | 
-		famixJavaInvocation receiver: famixVariable.
-		famixVariable declaredType ifNotNil: [ :candidateClass | 
-			candidateClass methods
-				detect: [ :m | m name = aFASTJavaMethodInvocation name ]
-				ifOne: [ :candidateMethod | 
-					famixJavaInvocation addCandidate: candidateMethod ] ] ].
+	aFASTJavaMethodInvocation receiver ifNotNil: [ 
+		:fastInvocationReceiver | 
+		fastInvocationReceiver famixVariable ifNotNil: [ :famixVariable | 
+			famixJavaInvocation receiver: famixVariable.
+			famixVariable declaredType ifNotNil: [ :candidateClass | 
+				candidateClass methods
+					detect: [ :m | m name = aFASTJavaMethodInvocation name ]
+					ifOne: [ :candidateMethod | 
+						famixJavaInvocation addCandidate: candidateMethod ] ] ] ].
 
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
