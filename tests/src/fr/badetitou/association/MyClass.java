@@ -7,7 +7,9 @@ import fr.badetitou.association.mysuper.MySuperClass;
 
 public class MyClass extends MySuperClass implements MyInterface {
 
-	MyParametrizable<Object> parametrized = new MyParametrizable<Object>(); 
+	MyParametrizable<Object> parametrized = new MyParametrizable<Object>();
+	MyParametrizable parametrizable = new MyParametrizable(); 
+
 
 	ExternalFamixJavaClass methodM() throws MyException { 
 		return null;
@@ -34,6 +36,10 @@ public class MyClass extends MySuperClass implements MyInterface {
 
 	void aParametrizedTypeMethodCall() {
 		parametrized.myMethod();
+	}
+
+	void aParametrizableTypeMethodCall() {
+		parametrizable.myMethod();
 	}
 
 }
