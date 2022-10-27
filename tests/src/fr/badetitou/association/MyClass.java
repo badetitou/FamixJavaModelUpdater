@@ -26,7 +26,7 @@ public class MyClass extends MySuperClass implements MyInterface {
 	}
 
 	void localCall() {
-		aMethod();
+		this.aMethod();
 	}
 
 
