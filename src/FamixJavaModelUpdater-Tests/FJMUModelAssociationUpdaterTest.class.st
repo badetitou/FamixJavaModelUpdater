@@ -135,6 +135,41 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
 		equals: externalFamixJavaClassMethod
 ]
 
+{ #category : #'as yet unclassified' }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvocation [
+
+	| parameterizedType parameterizedClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	parameterizedType := (famixModel allWithType: FamixJavaParameterizableClass) detect: [ :c | 
+		                          c name = 'MyParametrizable' ].
+	parameterizedClassMethod := parameterizedType methods 
+		                                detect: [ :method | 
+		                                method name
+		                                = 'myMethod' ].
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	newMethod := famixModel allModelMethods detect: [ :c | 
+		             c name = 'aParametrizedTypeMethodCall' ].
+	"assertequals: 1 because the Call to the constructor is not yet supported"
+	self assert: newMethod queryAllOutgoingInvocations size equals: 1.
+	self
+		assert: newMethod queryAllOutgoingInvocations anyOne sender
+		equals: newMethod.
+	self
+		assert:
+		newMethod queryAllOutgoingInvocations anyOne candidates anyOne
+		equals: parameterizedClassMethod
+]
+
 { #category : #tests }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaSuperMethodInvocation [
 
