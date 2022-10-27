@@ -122,10 +122,11 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 		candidateClass := (candidate isKindOf: FamixJavaParameterizedType)
 			                  ifTrue: [ candidate parameterizableClass ]
 			                  ifFalse: [ candidate ].
-		candidateClass allMethods
-			detect: [ :m | m name = aFASTJavaMethodInvocation name ]
-			ifOne: [ :candidateMethod | 
-				famixJavaInvocation addCandidate: candidateMethod ] ].
+		candidateClass ifNotNil: [ :notNilCandidateClass | 
+			notNilCandidateClass allMethods
+				detect: [ :m | m name = aFASTJavaMethodInvocation name ]
+				ifOne: [ :candidateMethod | 
+					famixJavaInvocation addCandidate: candidateMethod ] ] ].
 
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
