@@ -50,6 +50,14 @@ TFJMUEntityFactory >> fastModel: anObject [
 ]
 
 { #category : #accessing }
+TFJMUEntityFactory >> fastScopeOwnerOf: aFASTJavaNode [
+
+	^ (aFASTJavaNode atAnyScope: { 
+			   FASTJavaMethodEntity.
+			   FASTJavaClassDeclaration }) ifNotNil: [ :scopes | scopes anyOne ]
+]
+
+{ #category : #accessing }
 TFJMUEntityFactory >> fileAnchorPath [
 
 	^ fileAnchorPath

@@ -82,7 +82,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 		equals: famixAnnotationType
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 
 	| fastClassDeclaration |
@@ -97,7 +97,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 		equals: 'MyClass'
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
 
 	| originalInterface myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -117,6 +117,29 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
 	self
 		assert: newlyCreatedFamixEntity interfaceImplementations anyOne interface
 		equals: originalInterface
+]
+
+{ #category : #tests }
+FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariable [
+
+	| myClass fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	self
+		assert:
+			(newlyCreatedFamixEntity methods detect: [ :m | m name = 'aMethod' ])
+				localVariables size
+		equals: 2
 ]
 
 { #category : #tests }
@@ -146,13 +169,20 @@ FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 { #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaVariableDeclarator [
 
-	| fasVariableDeclarator fastVarDeclStatement |
+	| fasVariableDeclarator fastVarDeclStatement fastClassDeclaration fastJavaModel famixClass |
+	fastJavaModel := FASTJavaModel new.
+	fastClassDeclaration := FASTJavaClassDeclaration new.
 	fastVarDeclStatement := FASTJavaVarDeclStatement new.
+	fastClassDeclaration addDeclaration: fastVarDeclStatement.
 	fasVariableDeclarator := FASTJavaVariableDeclarator new.
+	famixClass := FamixJavaClass new.
+	fastClassDeclaration famixTypeDefinition: famixClass.
+	famixModel add: famixClass.
 	fasVariableDeclarator variable: (FASTJavaVariableExpression new
 			 name: 'variableName';
 			 yourself).
 	fastVarDeclStatement addDeclarator: fasVariableDeclarator.
+	fastJavaModel addAll: { fastClassDeclaration. fastVarDeclStatement. fasVariableDeclarator }.
 	fasVariableDeclarator accept: modelUpdater.
 	self
 		assert: (famixModel allWithType: FamixJavaAttribute) size

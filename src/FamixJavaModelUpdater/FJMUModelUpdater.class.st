@@ -110,7 +110,7 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 	(aFastJavaClassDeclaration declarations select: [ :decl | 
 		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes | 
 		attributes declarators do: [ :decl | 
-			famixClass addAttribute: (decl accept: self) ] ].
+			(decl accept: self) ] ].
 
 	aFastJavaClassDeclaration superclass ifNotNil: [ :superclass | 
 		(aFastJavaClassDeclaration mooseModel allWithType:
@@ -150,6 +150,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 
 	| famixMethod |
 	famixMethod := self create: FamixJavaMethod from: aFastMethod.
+	aFastMethod famixMethod: famixMethod.
 	famixMethod name: aFastMethod name.
 	aFastMethod parameters do: [ :fastParam | 
 		famixMethod addParameter: (fastParam accept: self) ].
@@ -164,8 +165,8 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 			(self create: FamixJavaDeclaredException)
 				definingEntity: famixMethod;
 				exceptionClass: aClass ] ].
+	aFastMethod statements do: [ :statement | statement accept: self ].
 
-	aFastMethod famixMethod: famixMethod.
 	^ famixMethod
 ]
 
@@ -181,15 +182,24 @@ FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
 { #category : #'model - update' }
 FJMUModelUpdater >> visitFASTJavaVariableDeclarator: aFASTJavaVariableDeclarator [
 
-	| famixAttribute |
-	famixAttribute := self
-		                  create: FamixJavaAttribute
-		                  from: aFASTJavaVariableDeclarator.
-	famixAttribute name: aFASTJavaVariableDeclarator variable name.
-	(aFASTJavaVariableDeclarator atScope: FASTJavaVarDeclStatement) anyOne modifiers do: [ :modifier | 
-		(modifier token = 'public') ifTrue: [ famixAttribute isPublic: true ].
-		(modifier token = 'final') ifTrue: [ famixAttribute isFinal: true ].
-		(modifier token = 'static') ifTrue: [ famixAttribute isClassSide: true ].
-		].
-	^ famixAttribute
+	| famixVariable scope |
+	scope := self fastScopeOwnerOf: aFASTJavaVariableDeclarator.
+	famixVariable := (scope isKindOf: FASTJavaMethodEntity)
+		                 ifTrue: [ 
+			                 self
+				                 create: FamixJavaLocalVariable
+				                 from: aFASTJavaVariableDeclarator ]
+		                 ifFalse: [ 
+		                 self
+			                 create: FamixJavaAttribute
+			                 from: aFASTJavaVariableDeclarator ].
+	famixVariable name: aFASTJavaVariableDeclarator variable name.
+	(aFASTJavaVariableDeclarator atScope: FASTJavaVarDeclStatement)
+		anyOne modifiers do: [ :modifier | 
+		modifier token = 'public' ifTrue: [ famixVariable isPublic: true ].
+		modifier token = 'final' ifTrue: [ famixVariable isFinal: true ].
+		modifier token = 'static' ifTrue: [ famixVariable isClassSide: true ] ].
+	(scope isKindOf: FASTJavaMethodEntity)
+		ifTrue: [ scope famixMethod addLocalVariable: famixVariable ]
+		ifFalse: [ scope famixTypeDefinition addAttribute: famixVariable ]
 ]

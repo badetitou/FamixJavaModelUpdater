@@ -102,6 +102,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 			 copyFrom: aFASTJavaMethodInvocation startPos
 			 to: aFASTJavaMethodInvocation endPos).
 	famixJavaInvocation sender: (self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
+	self h.
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
 ]
