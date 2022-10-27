@@ -143,6 +143,30 @@ FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariable [
 ]
 
 { #category : #tests }
+FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariableDeclaredType [
+
+	| myClass fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	self
+		assert: (newlyCreatedFamixEntity methods detect: [ :m | 
+				 m name = 'aMethodWithInvocation' ]) localVariables anyOne
+				declaredType
+		equals: (famixModel allModelClasses detect: [ :c | 
+				 c name = 'ExternalFamixJavaClass' ])
+]
+
+{ #category : #tests }
 FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 
 	| fastMethod |

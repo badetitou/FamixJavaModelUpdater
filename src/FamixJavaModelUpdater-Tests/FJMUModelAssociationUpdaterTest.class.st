@@ -11,7 +11,7 @@ Class {
 	#category : #'FamixJavaModelUpdater-Tests-Updater'
 }
 
-{ #category : #test }
+{ #category : #running }
 FJMUModelAssociationUpdaterTest >> setUp [
 
 	modelUpdater := FJMUModelUpdater new.
@@ -70,7 +70,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownExcept
 				declaredExceptions anyOne exceptionClass
 ]
 
-{ #category : #test }
+{ #category : #tests }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 
 	| fastClassDeclaration famixAccess |
@@ -92,7 +92,50 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 	self assert: famixAccess variable name equals: 'i'
 ]
 
-{ #category : #test }
+{ #category : #tests }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
+
+	| externalFamixJavaClass externalFamixJavaClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity myExternalFamixJavaClassVariable |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	externalFamixJavaClass := famixModel allModelClasses detect: [ :c | 
+		                          c name = 'ExternalFamixJavaClass' ].
+	externalFamixJavaClassMethod := externalFamixJavaClass methods 
+		                                detect: [ :method | 
+		                                method name
+		                                = 'externalFamixJavaMethod' ].
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+
+	fastClassDeclaration := myClass generateFastJava.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	newMethod := famixModel allModelMethods detect: [ :c | 
+		             c name = 'aMethodWithInvocation' ].
+	myExternalFamixJavaClassVariable := (famixModel allWithType:
+		                                     FamixJavaLocalVariable) 
+		                                    detect: [ :c | 
+		                                    c name
+		                                    = 'myExternalFamixJavaClass' ].
+	"assertequals: 1 because the Call to the constructor is not yet supported"
+	self assert: newMethod queryAllOutgoingInvocations size equals: 1.
+	self
+		assert: newMethod queryAllOutgoingInvocations anyOne sender
+		equals: newMethod.
+	self
+		assert: newMethod queryAllOutgoingInvocations anyOne receiver
+		equals: myExternalFamixJavaClassVariable.
+	self
+		assert:
+		newMethod queryAllOutgoingInvocations anyOne candidates anyOne
+		equals: externalFamixJavaClassMethod
+]
+
+{ #category : #tests }
 FJMUModelAssociationUpdaterTest >> testVisitFASTTVariableExpression [
 
 	| fastClassDeclaration famixAccess |

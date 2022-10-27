@@ -199,6 +199,11 @@ FJMUModelUpdater >> visitFASTJavaVariableDeclarator: aFASTJavaVariableDeclarator
 		modifier token = 'public' ifTrue: [ famixVariable isPublic: true ].
 		modifier token = 'final' ifTrue: [ famixVariable isFinal: true ].
 		modifier token = 'static' ifTrue: [ famixVariable isClassSide: true ] ].
+	(aFASTJavaVariableDeclarator varDeclOwner type isKindOf:
+		 FASTJavaClassTypeExpression) ifTrue: [ 
+		(self retrieveClassFromModel:
+			 aFASTJavaVariableDeclarator varDeclOwner type typeName name) 
+			ifNotNil: [ :type | famixVariable declaredType: type ] ].
 	(scope isKindOf: FASTJavaMethodEntity)
 		ifTrue: [ scope famixMethod addLocalVariable: famixVariable ]
 		ifFalse: [ scope famixTypeDefinition addAttribute: famixVariable ]

@@ -42,7 +42,15 @@ FJMUModelCleaner >> visitEntity: aFamixJavaEntity [
 ]
 
 { #category : #visiting }
-FJMUModelCleaner >> visitMethod: aFamixJavaMethod [
+FJMUModelCleaner >> visitLocalVariable: aFamixJavaLocalVariable [
 
+	aFamixJavaLocalVariable mooseModel ifNotNil: [ aFamixJavaLocalVariable mooseModel remove: aFamixJavaLocalVariable ]
+]
+
+{ #category : #visiting }
+FJMUModelCleaner >> visitMethod: aFamixJavaMethod [
+	aFamixJavaMethod localVariables copy do: [ :att | 
+		att parentBehaviouralEntity: nil.
+		att accept: self ].
 	aFamixJavaMethod mooseModel ifNotNil: [ aFamixJavaMethod mooseModel remove: aFamixJavaMethod ]
 ]

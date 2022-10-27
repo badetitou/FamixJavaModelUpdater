@@ -101,8 +101,14 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 		(aFASTJavaMethodInvocation rootNode sourceText
 			 copyFrom: aFASTJavaMethodInvocation startPos
 			 to: aFASTJavaMethodInvocation endPos).
-	famixJavaInvocation sender: (self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
-	self h.
+	famixJavaInvocation sender:
+		(self resolveFamixScopeContainerOf: aFASTJavaMethodInvocation).
+	aFASTJavaMethodInvocation receiver famixVariable ifNotNil: [ 
+		:famixVariable | 
+		famixJavaInvocation receiver: famixVariable.
+		famixVariable.
+		"self h "].
+
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
 ]
