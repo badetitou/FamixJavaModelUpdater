@@ -106,8 +106,11 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 	aFASTJavaMethodInvocation receiver famixVariable ifNotNil: [ 
 		:famixVariable | 
 		famixJavaInvocation receiver: famixVariable.
-		famixVariable.
-		"self h "].
+		famixVariable declaredType ifNotNil: [ :candidateClass | 
+			candidateClass methods
+				detect: [ :m | m name = aFASTJavaMethodInvocation name ]
+				ifOne: [ :candidateMethod | 
+					famixJavaInvocation addCandidate: candidateMethod ] ] ].
 
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
