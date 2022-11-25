@@ -24,7 +24,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           registry: hub.docker.io
-          image:  badetitou/verveinej:v3.0.0
+          image:  badetitou/verveinej:v3.0.1
           options: -v ${{ github.workspace }}:/src
           run: |
             cd tests
