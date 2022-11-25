@@ -28,7 +28,7 @@ jobs:
           options: -v ${{ github.workspace }}:/src
           run: |
             cd tests
-            /VerveineJ-3.0.0/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
+            /VerveineJ-3.0.1/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
             cd ..
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
