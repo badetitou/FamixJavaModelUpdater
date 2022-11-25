@@ -64,10 +64,10 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownExcept
 		                           fastModel: fastClassDeclaration;
 		                           update.
 	self
-		assert: method declaredExceptions anyOne exceptionClass
+		assert: method declaredExceptions anyOne
 		equals:
 			(newlyCreatedFamixEntity methods detect: [ :m | m name = 'methodM' ])
-				declaredExceptions anyOne exceptionClass
+				thrownExceptions anyOne
 ]
 
 { #category : #tests }
