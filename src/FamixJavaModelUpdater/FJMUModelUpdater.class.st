@@ -161,7 +161,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 				famixMethod addAnnotationInstance: annotationInstance ] ].
 	aFastMethod throws do: [ :throw | 
 		(self retrieveClassFromModel: throw typeName name) ifNotNil: [ 
-			:aClass | famixMethod addThrownException: aClass ] ].
+			:aClass | famixMethod addDeclaredException: aClass ] ].
 	aFastMethod statements do: [ :statement | statement accept: self ].
 
 	^ famixMethod
