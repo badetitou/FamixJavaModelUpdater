@@ -24,7 +24,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           registry: ghcr.io
-          image:  evref-bl/verveinej:v3.0.7
+          image:  ghcr.io/evref-bl/verveinej:v3.0.7
           options: -v ${{ github.workspace }}:/src
           run: |
             cd tests
