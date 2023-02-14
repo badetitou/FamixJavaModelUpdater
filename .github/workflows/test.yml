@@ -23,12 +23,12 @@ jobs:
           fetch-depth: '0'
       - uses: addnab/docker-run-action@v3
         with:
-          registry: hub.docker.io
-          image:  badetitou/verveinej:v3.0.1
+          registry: ghcr.io
+          image:  evref-bl/verveinej:v3.0.7
           options: -v ${{ github.workspace }}:/src
           run: |
             cd tests
-            /VerveineJ-3.0.1/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
+            /VerveineJ-3.0.7/verveinej.sh  -format json -o output.json -alllocals -anchor assoc .
             cd ..
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
