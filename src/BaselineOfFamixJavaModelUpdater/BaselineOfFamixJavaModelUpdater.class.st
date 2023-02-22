@@ -19,10 +19,10 @@ BaselineOfFamixJavaModelUpdater >> defineDependencies: spec [
 	spec baseline: 'FASTJava' with: [ 
 		spec
 			loads: #( 'smacc' 'visitor' );
-			repository: 'github://moosetechnology/FAST-Java:v2/src' ].
+			repository: 'github://moosetechnology/FAST-Java:v3/src' ].
 	spec
 		baseline: 'Carrefour'
-		with: [ spec repository: 'github://badetitou/Carrefour:v3/src' ].
+		with: [ spec repository: 'github://badetitou/Carrefour:v4/src' ].
 	spec
 		baseline: 'GitBridge'
 		with: [ spec repository: 'github://jecisc/GitBridge:v1.x.x/src' ]
