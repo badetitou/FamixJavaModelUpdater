@@ -25,6 +25,14 @@ Class {
 	#category : #'FamixJavaModelUpdater-Updater'
 }
 
+{ #category : #'model - update' }
+FJMUModelUpdater >> addModifier: modifier to: famixMethod [
+	(modifier = #private) ifTrue: [ 
+		^ famixMethod isPrivate: true ].
+	(modifier = #synchronized) ifTrue: [ 
+		^ famixMethod isSynchronized: true ]
+]
+
 { #category : #accessing }
 FJMUModelUpdater >> cleaner [
 
@@ -190,6 +198,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 		ifFalse: [ 
 			(self retrieveClassFromModel: aFastMethod type typeName name) ifNotNil: [ 
 				:aClass | famixMethod declaredType: aClass ] ].
+	aFastMethod modifiers do: [ :modifier | self addModifier: modifier token to: famixMethod ].
 	^ famixMethod
 ]
 

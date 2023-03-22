@@ -170,6 +170,30 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
 		equals: externalFamixJavaClassMethod
 ]
 
+{ #category : #tests }
+FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodModifiers [
+
+	| myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
+	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
+		famixModel importFromJSONStream: stream ].
+	famixModel rootFolder: FJMUBridge testsResources pathString.
+	myClass := famixModel allModelClasses detect: [ :c | 
+		           c name = 'MyClass' ].
+	fastClassDeclaration := JavaSmaCCProgramNodeImporterVisitor new 
+		                        parseCodeString:
+		                        myClass sourceAnchor completeText.
+	newlyCreatedFamixEntity := modelUpdater
+		                           famixModel: famixModel;
+		                           famixEntity: myClass;
+		                           fastModel: fastClassDeclaration;
+		                           update.
+	newMethod := famixModel allModelMethods detect: [ :c | 
+		             c name = 'methodMyClass' ].
+	"assertequals: 1 because the Call to the constructor is not yet supported"
+	self assert: newMethod isPrivate equals: true.
+	self assert: newMethod isSynchronized equals: true
+]
+
 { #category : #'as yet unclassified' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvocation [
 
