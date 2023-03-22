@@ -42,4 +42,8 @@ public class MyClass extends MySuperClass implements MyInterface {
 		parametrizable.myMethod();
 	}
 
+	private synchronized MyClass methodMyClass() {
+		return new MyClass();
+	}
+
 }
