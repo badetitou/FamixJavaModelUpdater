@@ -106,7 +106,8 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 
 	(aFastJavaClassDeclaration declarations select: [ :decl | 
 		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method | 
-		famixClass addMethod: (method accept: self) ].
+		(method accept: self) parentType: famixClass.
+		 ].
 	(aFastJavaClassDeclaration declarations select: [ :decl | 
 		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes | 
 		attributes declarators do: [ :decl | 
