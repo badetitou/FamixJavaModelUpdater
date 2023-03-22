@@ -186,7 +186,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 			:aClass | famixMethod addDeclaredException: aClass ] ].
 	aFastMethod statements do: [ :statement | statement accept: self ].
 
-	(aFastMethod type isKindOf: FASTJavaPrimitiveTypeExpression) 
+	(aFastMethod type isNil or: [ aFastMethod type isKindOf: FASTJavaPrimitiveTypeExpression ]) 
 		ifFalse: [ 
 			(self retrieveClassFromModel: aFastMethod type typeName name) ifNotNil: [ 
 				:aClass | famixMethod declaredType: aClass ] ].
