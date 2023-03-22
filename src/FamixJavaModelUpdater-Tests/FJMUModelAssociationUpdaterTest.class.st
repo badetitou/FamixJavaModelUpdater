@@ -47,27 +47,36 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredType
 { #category : #tests }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationParentTypeMethod [
 
-	| externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity |
+	| externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity externalFamixClass |
 	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
 		famixModel importFromJSONStream: stream ].
 	famixModel rootFolder: FJMUBridge testsResources pathString.
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
+	externalFamixClass := famixModel allModelClasses detect: [ :c | 
+		                      c name = 'ExternalFamixJavaClass' ].
 	externalFamixMethod := famixModel allModelMethods detect: [ :c | 
 		                       c name = 'methodM' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := JavaSmaCCProgramNodeImporterVisitor new 
+		                        parseCodeString:
+		                        myClass sourceAnchor completeText.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
 		                           fastModel: fastClassDeclaration;
 		                           update.
 
+	self assert: externalFamixMethod parentType equals: nil.
 	self
-		assert: externalFamixMethod parentType
-		equals: nil.
+		assert:
+			(newlyCreatedFamixEntity methods detect: [ :m | m name = 'methodM' ])
+				parentType
+		equals: newlyCreatedFamixEntity.
 	self
-		assert: (newlyCreatedFamixEntity methods detect: [ :m | m name = 'methodM' ]) parentType
-		equals: newlyCreatedFamixEntity
+		assert:
+			(newlyCreatedFamixEntity methods detect: [ :m | m name = 'methodM' ])
+				declaredType
+		equals: externalFamixClass
 ]
 
 { #category : #tests }

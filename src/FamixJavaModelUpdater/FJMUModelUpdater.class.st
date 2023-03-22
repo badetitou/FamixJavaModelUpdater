@@ -54,6 +54,27 @@ FJMUModelUpdater >> initialize [
 	cleaner := FJMUModelCleaner new
 ]
 
+{ #category : #'model - create' }
+FJMUModelUpdater >> retrieveClassFromModel: aClassName [
+
+	^ (fastModel allWithType: FASTJavaImportDeclaration)
+		  detect: [ :importDeclaration | 
+			  importDeclaration declarationName name = aClassName ]
+		  ifOne: [ :importDeclaration | 
+			  self famixModel allPackages
+				  detect: [ :pa | 
+					  pa qualifiedName
+					  = importDeclaration declarationName namespace fullName ]
+				  ifOne: [ :package | 
+					  package types
+						  detect: [ :type | type name = aClassName ]
+						  ifNone: [ nil ] ] ]
+		  ifNone: [ 
+			  self famixModel allModelTypes asOrderedCollection
+				  detect: [ :class | class name = aClassName ]
+				  ifNone: [ nil ] ]
+]
+
 { #category : #'model - update' }
 FJMUModelUpdater >> update [
 
@@ -165,6 +186,10 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 			:aClass | famixMethod addDeclaredException: aClass ] ].
 	aFastMethod statements do: [ :statement | statement accept: self ].
 
+	(aFastMethod type isKindOf: FASTJavaPrimitiveTypeExpression) 
+		ifFalse: [ 
+			(self retrieveClassFromModel: aFastMethod type typeName name) ifNotNil: [ 
+				:aClass | famixMethod declaredType: aClass ] ].
 	^ famixMethod
 ]
 
