@@ -62,6 +62,17 @@ FJMUModelUpdater >> initialize [
 	cleaner := FJMUModelCleaner new
 ]
 
+{ #category : #accessing }
+FJMUModelUpdater >> resolveTypeNameOf: aType [
+
+	aType ifNil: [ ^ nil ].
+	(aType isKindOf: FASTJavaTypeName) ifTrue: [ ^ aType name ].
+	(aType isKindOf: FASTJavaPrimitiveTypeExpression) ifTrue: [ self h ].
+	(aType isKindOf: FASTJavaArrayTypeExpression) ifTrue: [ 
+		^ self resolveTypeNameOf: aType baseType ].
+	^ self resolveTypeNameOf: aType typeName
+]
+
 { #category : #'model - create' }
 FJMUModelUpdater >> retrieveClassFromModel: aClassName [
 
@@ -197,8 +208,9 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 	(aFastMethod type isNil or: [ 
 		 aFastMethod type isKindOf: FASTJavaPrimitiveTypeExpression ]) 
 		ifFalse: [ 
-			(self retrieveClassFromModel: aFastMethod type typeName name) 
-				ifNotNil: [ :aClass | famixMethod declaredType: aClass ] ].
+			(self retrieveClassFromModel:
+				 (self resolveTypeNameOf: aFastMethod type)) ifNotNil: [ :aClass | 
+				famixMethod declaredType: aClass ] ].
 	(aFastMethod modifiers select: [ :modifier | 
 		 modifier isKindOf: FASTJavaModifier ]) do: [ :modifier | 
 		self addModifier: modifier token to: famixMethod ].
