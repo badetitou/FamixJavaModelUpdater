@@ -201,12 +201,12 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvoca
 	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
 		famixModel importFromJSONStream: stream ].
 	famixModel rootFolder: FJMUBridge testsResources pathString.
-	parameterizedType := (famixModel allWithType: FamixJavaParameterizableClass) detect: [ :c | 
-		                          c name = 'MyParametrizable' ].
-	parameterizedClassMethod := parameterizedType methods 
-		                                detect: [ :method | 
-		                                method name
-		                                = 'myMethod' ].
+
+	parameterizedClassMethod := (famixModel allWithType: FamixJavaMethod) 
+		                            detect: [ :m | 
+			                            m name = 'myMethod' and: [ 
+				                            m parentType isKindOf:
+					                            FamixJavaParameterizableClass ] ].
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
 
