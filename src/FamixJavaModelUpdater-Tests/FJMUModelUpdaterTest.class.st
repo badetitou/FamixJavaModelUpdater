@@ -108,7 +108,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
 		                          c name = 'MyInterface' ].
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -129,7 +129,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariable [
 
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -152,7 +152,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariableDeclaredType [
 
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;

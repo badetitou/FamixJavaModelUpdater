@@ -32,7 +32,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredType
 		           c name = 'MyClass' ].
 	externalFamixMethod := famixModel allModelMethods detect: [ :c | 
 		                       c name = 'externalFamixJavaMethod' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -92,7 +92,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownExcept
 		           c name = 'MyClass' ].
 	method := famixModel allModelMethods detect: [ :c | 
 		          c name = 'methodM' ].
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -143,7 +143,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
 
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -210,7 +210,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvoca
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
 
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
@@ -245,7 +245,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaSuperMethodInvocation [
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
 
-	fastClassDeclaration := myClass generateFastJava.
+	fastClassDeclaration := myClass getFASTModel.
 	newlyCreatedFamixEntity := modelUpdater
 		                           famixModel: famixModel;
 		                           famixEntity: myClass;
