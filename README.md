@@ -37,5 +37,5 @@ FJMUModelUpdater new
 You can build the `output.json` with VerveineJ with the following command.
 
 ```st
-docker run -v "/path/to/FamixJavaModelUpdater/tests:/src" ghcr.io/evref-bl/verveinej:v3.0.7 -format json -o output.json -alllocals -anchor assoc .
+docker run -v "/path/to/FamixJavaModelUpdater/tests:/src" ghcr.io/evref-bl/verveinej:v3.0.13 -format json -o output.json -alllocals -anchor assoc .
 ```

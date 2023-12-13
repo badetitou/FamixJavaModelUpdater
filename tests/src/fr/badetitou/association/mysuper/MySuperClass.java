@@ -1,9 +1,9 @@
 package fr.badetitou.association.mysuper;
 
 
-public class MySuperClass () {
+public class MySuperClass {
     
-    void aSuperMethod() {
+    protected void aSuperMethod() {
 
     }
     

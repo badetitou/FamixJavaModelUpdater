@@ -3,6 +3,7 @@ package fr.badetitou.association;
 import fr.badetitou.external.ExternalFamixJavaClass;
 import fr.badetitou.exception.MyException;
 import fr.badetitou.interfaces.MyInterface;
+import fr.badetitou.parametrized.MyParametrizable;
 import fr.badetitou.association.mysuper.MySuperClass;
 
 public class MyClass extends MySuperClass implements MyInterface {
