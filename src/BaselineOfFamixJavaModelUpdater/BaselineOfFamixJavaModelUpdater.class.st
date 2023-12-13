@@ -18,7 +18,7 @@ BaselineOfFamixJavaModelUpdater >> defineDependencies: spec [
 
 	spec
 		baseline: 'Carrefour'
-		with: [ spec repository: 'github://moosetechnology/Carrefour:v4.0.2/src' ].
+		with: [ spec repository: 'github://moosetechnology/Carrefour:v4.0.3/src' ].
 	spec
 		baseline: 'GitBridge'
 		with: [ spec repository: 'github://jecisc/GitBridge:v1.x.x/src' ]
