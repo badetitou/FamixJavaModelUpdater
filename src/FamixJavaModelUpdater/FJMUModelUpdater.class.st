@@ -125,7 +125,7 @@ FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 
 	(self famixModel allWithType: FamixJavaAnnotationType)
 		detect: [ :famixAnnotationType | 
-			famixAnnotationType name = aFASTJavaAnnotation expression name ]
+			famixAnnotationType name = aFASTJavaAnnotation name ]
 		ifOne: [ :annotationType | 
 			| annotationInstance |
 			annotationInstance := self create: FamixJavaAnnotationInstance from: aFASTJavaAnnotation.
