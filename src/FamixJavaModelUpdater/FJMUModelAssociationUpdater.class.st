@@ -106,31 +106,29 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 	parentBehavior := self resolveFamixScopeContainerOf:
 		                  aFASTJavaMethodInvocation.
 	famixJavaInvocation sender: parentBehavior.
-	(aFASTJavaMethodInvocation receiver isNotNil and: [ 
+	(aFASTJavaMethodInvocation receiver isNotNil and: [
 		 aFASTJavaMethodInvocation receiver famixVariable isNotNil ])
-		ifTrue: [ 
+		ifTrue: [
 			famixJavaInvocation receiver:
 				aFASTJavaMethodInvocation receiver famixVariable ]
-		ifFalse: [ 
+		ifFalse: [
 			| anImplicitSelf |
 			anImplicitSelf := self create: FamixJavaImplicitVariable.
 			famixJavaInvocation receiver: anImplicitSelf.
 			anImplicitSelf parentBehaviouralEntity: parentBehavior ].
 	((famixJavaInvocation receiver isKindOf: FamixJavaImplicitVariable)
-		 ifTrue: [ 
+		 ifTrue: [
 		 (famixJavaInvocation receiver atScope: FamixTClass) anyOne ]
-		 ifFalse: [ famixJavaInvocation receiver declaredType ]) ifNotNil: [ 
-		:candidate | 
+		 ifFalse: [ famixJavaInvocation receiver declaredType ]) ifNotNil: [
+		:candidate |
 		| candidateClass |
-		candidateClass := (candidate isKindOf: FamixJavaParameterizedType)
-			                  ifTrue: [ candidate parameterizableClass ]
-			                  ifFalse: [ candidate ].
-		candidateClass ifNotNil: [ :notNilCandidateClass | 
+		candidateClass := candidate.
+		candidateClass ifNotNil: [ :notNilCandidateClass |
 			((candidateClass isKindOf: FamixJavaInterface)
 				 ifTrue: [ notNilCandidateClass methods ]
 				 ifFalse: [ notNilCandidateClass allMethods ])
 				detect: [ :m | m name = aFASTJavaMethodInvocation name ]
-				ifOne: [ :candidateMethod | 
+				ifOne: [ :candidateMethod |
 					famixJavaInvocation addCandidate: candidateMethod ] ] ].
 
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.

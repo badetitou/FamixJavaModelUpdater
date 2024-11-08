@@ -2,16 +2,18 @@
 A FJMUModelUpdaterTest is a test class for testing the behavior of FJMUModelUpdater
 "
 Class {
-	#name : #FJMUModelUpdaterTest,
-	#superclass : #TestCase,
+	#name : 'FJMUModelUpdaterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'modelUpdater',
 		'famixModel'
 	],
-	#category : #'FamixJavaModelUpdater-Tests-Updater'
+	#category : 'FamixJavaModelUpdater-Tests-Updater',
+	#package : 'FamixJavaModelUpdater-Tests',
+	#tag : 'Updater'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 FJMUModelUpdaterTest >> setUp [
 
 	modelUpdater := FJMUModelUpdater new.
@@ -19,7 +21,7 @@ FJMUModelUpdaterTest >> setUp [
 	modelUpdater famixModel: famixModel
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTClassWithAttributes [
 
 	| fastClassDeclaration |
@@ -37,7 +39,7 @@ FJMUModelUpdaterTest >> testVisitFASTClassWithAttributes [
 		equals: 2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTClassWithAttributesAndModifiers [
 
 	| fastClassDeclaration |
@@ -59,7 +61,7 @@ FJMUModelUpdaterTest >> testVisitFASTClassWithAttributesAndModifiers [
 			 att name = 'b' ]) isClassSide
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 
 	| fastJavaAnnotation famixAnnotationType |
@@ -80,7 +82,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaAnnotation [
 		equals: famixAnnotationType
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 
 	| fastClassDeclaration |
@@ -95,7 +97,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 		equals: 'MyClass'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
 
 	| originalInterface myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -117,7 +119,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclarationInterface [
 		equals: originalInterface
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariable [
 
 	| myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -140,7 +142,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariable [
 		equals: 2
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariableDeclaredType [
 
 	| myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -164,7 +166,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaLocalVariableDeclaredType [
 				 c name = 'ExternalFamixJavaClass' ])
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 
 	| fastMethod |
@@ -175,7 +177,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaMethodEntity [
 	self assert: famixModel anyOne name equals: 'methodName'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 
 	| fastParameter |
@@ -188,7 +190,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaParameter [
 	self assert: famixModel anyOne name equals: 'variableName'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelUpdaterTest >> testVisitFASTJavaVariableDeclarator [
 
 	| fasVariableDeclarator fastVarDeclStatement fastClassDeclaration fastJavaModel famixClass |

@@ -2,16 +2,18 @@
 A FJMUModelAssociationUpdaterTest is a test class for testing the behavior of FJMUModelAssociationUpdater
 "
 Class {
-	#name : #FJMUModelAssociationUpdaterTest,
-	#superclass : #TestCase,
+	#name : 'FJMUModelAssociationUpdaterTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'modelUpdater',
 		'famixModel'
 	],
-	#category : #'FamixJavaModelUpdater-Tests-Updater'
+	#category : 'FamixJavaModelUpdater-Tests-Updater',
+	#package : 'FamixJavaModelUpdater-Tests',
+	#tag : 'Updater'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 FJMUModelAssociationUpdaterTest >> setUp [
 
 	modelUpdater := FJMUModelUpdater new.
@@ -19,7 +21,7 @@ FJMUModelAssociationUpdaterTest >> setUp [
 	modelUpdater famixModel: famixModel
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredTypeMethod [
 
 	| externalFamixClass externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -44,7 +46,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationDeclaredType
 		equals: newlyCreatedFamixEntity
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationParentTypeMethod [
 
 	| externalFamixMethod myClass fastClassDeclaration newlyCreatedFamixEntity externalFamixClass |
@@ -79,7 +81,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationParentTypeMe
 		equals: externalFamixClass
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownException [
 
 	| originalExceptionClass method myClass fastClassDeclaration newlyCreatedFamixEntity |
@@ -105,7 +107,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaClassDeclarationThrownExcept
 				declaredExceptions anyOne
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 
 	| fastClassDeclaration famixAccess |
@@ -127,7 +129,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaFieldAccess [
 	self assert: famixAccess variable name equals: 'i'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
 
 	| externalFamixJavaClass externalFamixJavaClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity myExternalFamixJavaClassVariable |
@@ -170,7 +172,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodInvocation [
 		equals: externalFamixJavaClassMethod
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodModifiers [
 
 	| myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
@@ -194,7 +196,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodModifiers [
 	self assert: newMethod isSynchronized equals: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvocation [
 
 	| parameterizedType parameterizedClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
@@ -206,7 +208,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvoca
 		                            detect: [ :m | 
 			                            m name = 'myMethod' and: [ 
 				                            m parentType isKindOf:
-					                            FamixJavaParameterizableClass ] ].
+					                            FamixJavaParametricClass ] ].
 	myClass := famixModel allModelClasses detect: [ :c | 
 		           c name = 'MyClass' ].
 
@@ -229,7 +231,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvoca
 		equals: parameterizedClassMethod
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaSuperMethodInvocation [
 
 	| externalFamixJavaClass externalFamixJavaClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity myExternalFamixJavaClassVariable |
@@ -267,7 +269,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaSuperMethodInvocation [
 		equals: externalFamixJavaClassMethod
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTTVariableExpression [
 
 	| fastClassDeclaration famixAccess |

@@ -1,1 +1,1 @@
-Package { #name : #'FamixJavaModelUpdater-Tests' }
+Package { #name : 'FamixJavaModelUpdater-Tests' }
