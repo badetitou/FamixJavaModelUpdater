@@ -1,13 +1,13 @@
-name: CI Moose11
+name: CI Moose12
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   push:
-    branches: [ main ]
+    branches: [ v* ]
   pull_request:
-    branches: [ main ]
+    branches: [ v* ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        smalltalk: [  Moose64-11 ]
+        smalltalk: [  Moose64-12 ]
     name: ${{ matrix.smalltalk }}
     steps:
       - uses: actions/checkout@v3

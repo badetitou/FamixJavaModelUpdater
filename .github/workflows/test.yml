@@ -5,9 +5,9 @@ env:
 
 on:
   push:
-    branches: [ main ]
+    branches: [ v* ]
   pull_request:
-    branches: [ main ]
+    branches: [ v* ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        smalltalk: [  Moose64-10 ]
+        smalltalk: [  Moose64-12 ]
     name: ${{ matrix.smalltalk }}
     steps:
       - uses: actions/checkout@v3
