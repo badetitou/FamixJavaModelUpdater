@@ -87,9 +87,7 @@ FJMUModelUpdaterTest >> testVisitFASTJavaClassDeclaration [
 
 	| fastClassDeclaration |
 	fastClassDeclaration := FASTJavaClassDeclaration new.
-	fastClassDeclaration
-		name: 'MyClass';
-		yourself.
+	fastClassDeclaration name: 'MyClass'.
 	fastClassDeclaration accept: modelUpdater.
 	self assert: (famixModel allWithType: FamixJavaClass) size equals: 1.
 	self

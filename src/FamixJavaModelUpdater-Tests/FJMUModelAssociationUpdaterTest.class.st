@@ -196,10 +196,10 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaMethodModifiers [
 	self assert: newMethod isSynchronized equals: true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvocation [
 
-	| parameterizedType parameterizedClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
+	| parameterizedClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
 	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
 		famixModel importFromJSONStream: stream ].
 	famixModel rootFolder: FJMUBridge testsResources pathString.
@@ -234,7 +234,7 @@ FJMUModelAssociationUpdaterTest >> testVisitFASTJavaParametrizedTypeMethodInvoca
 { #category : 'tests' }
 FJMUModelAssociationUpdaterTest >> testVisitFASTJavaSuperMethodInvocation [
 
-	| externalFamixJavaClass externalFamixJavaClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity myExternalFamixJavaClassVariable |
+	| externalFamixJavaClass externalFamixJavaClassMethod myClass newMethod fastClassDeclaration newlyCreatedFamixEntity |
 	FJMUBridge testsResources / 'output.json' readStreamDo: [ :stream | 
 		famixModel importFromJSONStream: stream ].
 	famixModel rootFolder: FJMUBridge testsResources pathString.

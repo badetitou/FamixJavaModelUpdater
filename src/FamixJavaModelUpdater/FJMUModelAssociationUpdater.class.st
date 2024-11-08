@@ -92,7 +92,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 			(self resolveFamixScopeContainerOf: aFASTJavaFieldAccess) ]
 ]
 
-{ #category : 'model - update' }
+{ #category : 'generated' }
 FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInvocation [
 
 	| famixJavaInvocation parentBehavior |
@@ -121,16 +121,20 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 		 (famixJavaInvocation receiver atScope: FamixTClass) anyOne ]
 		 ifFalse: [ famixJavaInvocation receiver declaredType ]) ifNotNil: [
 		:candidate |
-		| candidateClass |
-		candidateClass := candidate.
-		candidateClass ifNotNil: [ :notNilCandidateClass |
-			((candidateClass isKindOf: FamixJavaInterface)
+		| realCandidateClass |
+		realCandidateClass := (candidate isParametricEntity and: [
+			                       candidate isConcreteEntity ])
+			                      ifFalse: [ candidate ]
+			                      ifTrue: [
+			                      candidate genericization genericEntity ].
+		realCandidateClass ifNotNil: [ :notNilCandidateClass |
+			((candidate isKindOf: FamixJavaInterface)
 				 ifTrue: [ notNilCandidateClass methods ]
 				 ifFalse: [ notNilCandidateClass allMethods ])
 				detect: [ :m | m name = aFASTJavaMethodInvocation name ]
 				ifOne: [ :candidateMethod |
-					famixJavaInvocation addCandidate: candidateMethod ] ] ].
-
+					famixJavaInvocation addCandidate: candidateMethod ]
+				ifNone: [  ] ] ].
 	aFASTJavaMethodInvocation famixInvocation: famixJavaInvocation.
 	^ famixJavaInvocation
 ]
