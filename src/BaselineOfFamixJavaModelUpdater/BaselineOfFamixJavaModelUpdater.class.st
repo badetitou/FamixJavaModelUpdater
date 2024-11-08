@@ -1,10 +1,11 @@
 Class {
-	#name : #BaselineOfFamixJavaModelUpdater,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfFamixJavaModelUpdater
+	#name : 'BaselineOfFamixJavaModelUpdater',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfFamixJavaModelUpdater',
+	#package : 'BaselineOfFamixJavaModelUpdater'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfFamixJavaModelUpdater >> baseline: spec [
 
 	<baseline>
@@ -13,22 +14,22 @@ BaselineOfFamixJavaModelUpdater >> baseline: spec [
 	self defineGroups: spec
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfFamixJavaModelUpdater >> defineDependencies: spec [
 
 	spec
 		baseline: 'Carrefour'
-		with: [ spec repository: 'github://moosetechnology/Carrefour:v4.0.3/src' ].
+		with: [ spec repository: 'github://moosetechnology/Carrefour:v5.0.1/src' ].
 	spec
 		baseline: 'GitBridge'
 		with: [ spec repository: 'github://jecisc/GitBridge:v1.x.x/src' ]
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfFamixJavaModelUpdater >> defineGroups: spec [
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfFamixJavaModelUpdater >> definePackages: spec [
 
 	spec
