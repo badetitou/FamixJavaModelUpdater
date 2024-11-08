@@ -89,7 +89,8 @@ FJMUModelUpdater >> retrieveClassFromModel: aClassName [
 				  ifFound: [ :package |
 					  package types
 						  detect: [ :type | type name = aClassName ]
-						  ifNone: [ nil ] ] ]
+						  ifNone: [ nil ] ]
+				  ifNone: [ nil ] ]
 		  ifNone: [
 			  self famixModel allModelTypes asOrderedCollection
 				  detect: [ :class | class name = aClassName ]
@@ -146,42 +147,40 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 	famixClass name: aFastJavaClassDeclaration name.
 	famixClass fastTypeDefinition: aFastJavaClassDeclaration.
 
-	(aFastJavaClassDeclaration declarations select: [ :decl | 
-		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method | 
-		(method accept: self) parentType: famixClass.
-		 ].
-	(aFastJavaClassDeclaration declarations select: [ :decl | 
-		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes | 
-		attributes declarators do: [ :decl | 
-			(decl accept: self) ] ].
+	(aFastJavaClassDeclaration declarations select: [ :decl |
+		 decl isKindOf: FASTJavaMethodEntity ]) do: [ :method |
+		(method accept: self) parentType: famixClass ].
+	(aFastJavaClassDeclaration declarations select: [ :decl |
+		 decl isKindOf: FASTJavaVarDeclStatement ]) do: [ :attributes |
+		attributes declarators do: [ :decl | decl accept: self ] ].
 
-	aFastJavaClassDeclaration superclass ifNotNil: [ :superclass | 
+	aFastJavaClassDeclaration superclass ifNotNil: [ :superclass |
 		(aFastJavaClassDeclaration mooseModel allWithType:
 			 FASTJavaImportDeclaration)
-			detect: [ :importDeclaration | 
-				importDeclaration declarationName name = superclass typeName name ]
-			ifFound: [ :importDeclaration | 
+			detect: [ :importDeclaration |
+				importDeclaration qualifiedName name = superclass typeName name ]
+			ifFound: [ :importDeclaration |
 				famixClass mooseModel allPackages
-					detect: [ :pa | 
+					detect: [ :pa |
 						pa qualifiedName
-						= importDeclaration declarationName namespace fullName ]
-					ifFound: [ :package | 
+						= importDeclaration qualifiedName namespace fullName ]
+					ifFound: [ :package |
 						package types
 							detect: [ :type | type name = superclass typeName name ]
-							ifOne: [ :type | 
+							ifOne: [ :type |
 								(self create: FamixJavaInheritance)
 									subclass: famixClass;
 									superclass: type ] ] ]
-			ifNone: [ 
+			ifNone: [
 				famixClass mooseModel allModelClasses asOrderedCollection
 					detect: [ :class | class name = superclass typeName name ]
-					ifOne: [ :class | 
+					ifOne: [ :class |
 						(self create: FamixJavaInheritance)
 							subclass: famixClass;
 							superclass: class ] ] ].
-	aFastJavaClassDeclaration interfaces do: [ :interface | 
-		(self retrieveClassFromModel: interface typeName name) ifNotNil: [ 
-			:famixInterface | 
+	aFastJavaClassDeclaration interfaces do: [ :interface |
+		(self retrieveClassFromModel: interface typeName name) ifNotNil: [
+			:famixInterface |
 			(self create: FamixJavaImplementation)
 				implementingClass: famixClass;
 				interface: famixInterface ] ].
