@@ -1,15 +1,17 @@
 Class {
-	#name : #FJMUModelCleaner,
-	#superclass : #Object,
+	#name : 'FJMUModelCleaner',
+	#superclass : 'Object',
 	#traits : 'FamixJavaVisitor',
 	#classTraits : 'FamixJavaVisitor classTrait',
 	#instVars : [
 		'famixEntity'
 	],
-	#category : #'FamixJavaModelUpdater-Cleaner'
+	#category : 'FamixJavaModelUpdater-Cleaner',
+	#package : 'FamixJavaModelUpdater',
+	#tag : 'Cleaner'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 FJMUModelCleaner >> clean: aFamixEntity [
 
 	aFamixEntity ifNotNil: [ 
@@ -17,13 +19,13 @@ FJMUModelCleaner >> clean: aFamixEntity [
 		aFamixEntity accept: self ]
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 FJMUModelCleaner >> visitAttribute: aFamixJavaAttribute [
 
 	aFamixJavaAttribute mooseModel ifNotNil: [ aFamixJavaAttribute mooseModel remove: aFamixJavaAttribute ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 FJMUModelCleaner >> visitClass: aFamixJavaClass [
 
 	aFamixJavaClass methods copy do: [ :m | 
@@ -36,18 +38,18 @@ FJMUModelCleaner >> visitClass: aFamixJavaClass [
 		aFamixJavaClass mooseModel remove: aFamixJavaClass ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 FJMUModelCleaner >> visitEntity: aFamixJavaEntity [
 	^ nil
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 FJMUModelCleaner >> visitLocalVariable: aFamixJavaLocalVariable [
 
 	aFamixJavaLocalVariable mooseModel ifNotNil: [ aFamixJavaLocalVariable mooseModel remove: aFamixJavaLocalVariable ]
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 FJMUModelCleaner >> visitMethod: aFamixJavaMethod [
 	aFamixJavaMethod localVariables copy do: [ :att | 
 		att parentBehaviouralEntity: nil.

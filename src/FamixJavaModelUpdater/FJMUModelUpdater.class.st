@@ -14,18 +14,20 @@ To use it:
 - send the `update` message
 "
 Class {
-	#name : #FJMUModelUpdater,
-	#superclass : #FASTJavaVisitor,
+	#name : 'FJMUModelUpdater',
+	#superclass : 'FASTJavaVisitor',
 	#traits : 'TFJMUEntityFactory',
 	#classTraits : 'TFJMUEntityFactory classTrait',
 	#instVars : [
 		'famixEntity',
 		'cleaner'
 	],
-	#category : #'FamixJavaModelUpdater-Updater'
+	#category : 'FamixJavaModelUpdater-Updater',
+	#package : 'FamixJavaModelUpdater',
+	#tag : 'Updater'
 }
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> addModifier: modifier to: famixMethod [
 	(modifier = #private) ifTrue: [ 
 		^ famixMethod isPrivate: true ].
@@ -33,36 +35,36 @@ FJMUModelUpdater >> addModifier: modifier to: famixMethod [
 		^ famixMethod isSynchronized: true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> cleaner [
 
 	^ cleaner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> cleaner: anObject [
 
 	cleaner := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> famixEntity [
 
 	^ famixEntity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> famixEntity: anObject [
 
 	famixEntity := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> initialize [
 	cleaner := FJMUModelCleaner new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelUpdater >> resolveTypeNameOf: aType [
 
 	aType ifNil: [ ^ nil ].
@@ -73,28 +75,28 @@ FJMUModelUpdater >> resolveTypeNameOf: aType [
 	^ self resolveTypeNameOf: aType typeName
 ]
 
-{ #category : #'model - create' }
+{ #category : 'model - create' }
 FJMUModelUpdater >> retrieveClassFromModel: aClassName [
 
 	^ (fastModel allWithType: FASTJavaImportDeclaration)
-		  detect: [ :importDeclaration | 
-			  importDeclaration declarationName name = aClassName ]
-		  ifOne: [ :importDeclaration | 
+		  detect: [ :importDeclaration |
+			  importDeclaration qualifiedName name = aClassName ]
+		  ifFound: [ :importDeclaration |
 			  self famixModel allPackages
-				  detect: [ :pa | 
+				  detect: [ :pa |
 					  pa qualifiedName
-					  = importDeclaration declarationName namespace fullName ]
-				  ifOne: [ :package | 
+					  = importDeclaration qualifiedName namespace fullName ]
+				  ifFound: [ :package |
 					  package types
 						  detect: [ :type | type name = aClassName ]
 						  ifNone: [ nil ] ] ]
-		  ifNone: [ 
+		  ifNone: [
 			  self famixModel allModelTypes asOrderedCollection
 				  detect: [ :class | class name = aClassName ]
 				  ifNone: [ nil ] ]
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> update [
 
 	| mainFastClassDeclaration newlyCreatedEntity |
@@ -108,7 +110,7 @@ FJMUModelUpdater >> update [
 	^ newlyCreatedEntity
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> updateAssociationFor: newlyCreatedEntity [
 
 	FJMUModelAssociationUpdater new
@@ -120,13 +122,13 @@ FJMUModelUpdater >> updateAssociationFor: newlyCreatedEntity [
 		update
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 
 	(self famixModel allWithType: FamixJavaAnnotationType)
 		detect: [ :famixAnnotationType | 
 			famixAnnotationType name = aFASTJavaAnnotation name ]
-		ifOne: [ :annotationType | 
+		ifFound: [ :annotationType | 
 			| annotationInstance |
 			annotationInstance := self create: FamixJavaAnnotationInstance from: aFASTJavaAnnotation.
 			annotationInstance annotationType: annotationType.
@@ -134,7 +136,7 @@ FJMUModelUpdater >> visitFASTJavaAnnotation: aFASTJavaAnnotation [
 		ifNone: [ ^ nil ]
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 
 	| famixClass |
@@ -158,12 +160,12 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 			 FASTJavaImportDeclaration)
 			detect: [ :importDeclaration | 
 				importDeclaration declarationName name = superclass typeName name ]
-			ifOne: [ :importDeclaration | 
+			ifFound: [ :importDeclaration | 
 				famixClass mooseModel allPackages
 					detect: [ :pa | 
 						pa qualifiedName
 						= importDeclaration declarationName namespace fullName ]
-					ifOne: [ :package | 
+					ifFound: [ :package | 
 						package types
 							detect: [ :type | type name = superclass typeName name ]
 							ifOne: [ :type | 
@@ -186,7 +188,7 @@ FJMUModelUpdater >> visitFASTJavaClassDeclaration: aFastJavaClassDeclaration [
 	^ famixClass
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 
 	| famixMethod |
@@ -217,7 +219,7 @@ FJMUModelUpdater >> visitFASTJavaMethodEntity: aFastMethod [
 	^ famixMethod
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
 
 	| famixParam |
@@ -226,7 +228,7 @@ FJMUModelUpdater >> visitFASTJavaParameter: aFASTJavaParameter [
 	^ famixParam
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelUpdater >> visitFASTJavaVariableDeclarator: aFASTJavaVariableDeclarator [
 
 	| famixVariable scope |

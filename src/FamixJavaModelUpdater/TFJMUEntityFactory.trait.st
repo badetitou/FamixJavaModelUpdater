@@ -1,20 +1,22 @@
 Trait {
-	#name : #TFJMUEntityFactory,
+	#name : 'TFJMUEntityFactory',
 	#instVars : [
 		'famixModel',
 		'fileAnchorPath',
 		'fastModel'
 	],
-	#category : #'FamixJavaModelUpdater-Updater'
+	#category : 'FamixJavaModelUpdater-Updater',
+	#package : 'FamixJavaModelUpdater',
+	#tag : 'Updater'
 }
 
-{ #category : #'model - create' }
+{ #category : 'model - create' }
 TFJMUEntityFactory >> create: aFamixClass [
 
 	^ self famixModel add: aFamixClass new
 ]
 
-{ #category : #'model - create' }
+{ #category : 'model - create' }
 TFJMUEntityFactory >> create: aFamixClass from: aFastJavaEntity [
 
 	| entity |
@@ -25,31 +27,31 @@ TFJMUEntityFactory >> create: aFamixClass from: aFastJavaEntity [
 	^ entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> famixModel [
 
 	^ famixModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> famixModel: anObject [
 
 	famixModel := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> fastModel [
 
 	^ fastModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> fastModel: anObject [
 
 	fastModel := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> fastScopeOwnerOf: aFASTJavaNode [
 
 	^ (aFASTJavaNode atAnyScope: { 
@@ -57,19 +59,19 @@ TFJMUEntityFactory >> fastScopeOwnerOf: aFASTJavaNode [
 			   FASTJavaClassDeclaration }) ifNotNil: [ :scopes | scopes anyOne ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> fileAnchorPath [
 
 	^ fileAnchorPath
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 TFJMUEntityFactory >> fileAnchorPath: anObject [
 
 	fileAnchorPath := anObject
 ]
 
-{ #category : #'model - create' }
+{ #category : 'model - create' }
 TFJMUEntityFactory >> generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEntity [
 
 	^ (self create: FamixJavaIndexedFileAnchor)
@@ -79,7 +81,7 @@ TFJMUEntityFactory >> generateAnchorBasedOn: famixSourceAnchor for: aFastJavaEnt
 		  yourself
 ]
 
-{ #category : #'model - create' }
+{ #category : 'model - create' }
 TFJMUEntityFactory >> retrieveClassFromModel: aClassName [
 
 	^ (fastModel allWithType: FASTJavaImportDeclaration)

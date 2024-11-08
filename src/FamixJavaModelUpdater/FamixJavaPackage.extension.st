@@ -1,12 +1,12 @@
-Extension { #name : #FamixJavaPackage }
+Extension { #name : 'FamixJavaPackage' }
 
-{ #category : #'*FamixJavaModelUpdater' }
+{ #category : '*FamixJavaModelUpdater' }
 FamixJavaPackage >> qualifiedName [
 
 	^ String streamContents: [ :stream | self qualifiedNameOn: stream ]
 ]
 
-{ #category : #'*FamixJavaModelUpdater' }
+{ #category : '*FamixJavaModelUpdater' }
 FamixJavaPackage >> qualifiedNameOn: aStream [
 
 	| parent |

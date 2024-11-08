@@ -7,42 +7,44 @@ For instance, I resolve:
 - invocation
 "
 Class {
-	#name : #FJMUModelAssociationUpdater,
-	#superclass : #FASTJavaVisitor,
+	#name : 'FJMUModelAssociationUpdater',
+	#superclass : 'FASTJavaVisitor',
 	#traits : 'TFJMUEntityFactory',
 	#classTraits : 'TFJMUEntityFactory classTrait',
 	#instVars : [
 		'newFamixEntity',
 		'famixEntity'
 	],
-	#category : #'FamixJavaModelUpdater-Updater'
+	#category : 'FamixJavaModelUpdater-Updater',
+	#package : 'FamixJavaModelUpdater',
+	#tag : 'Updater'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelAssociationUpdater >> famixEntity [
 
 	^ famixEntity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelAssociationUpdater >> famixEntity: anObject [
 
 	famixEntity := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelAssociationUpdater >> newFamixEntity [
 
 	^ newFamixEntity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FJMUModelAssociationUpdater >> newFamixEntity: anObject [
 
 	newFamixEntity := anObject
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> resolveFamixScopeContainerOf: aFASTEntity [
 
 	| scope |
@@ -52,7 +54,7 @@ FJMUModelAssociationUpdater >> resolveFamixScopeContainerOf: aFASTEntity [
 	(scope isKindOf: FASTJavaMethodEntity) ifTrue: [ ^ scope famixMethod ]
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> update [
 
 	| mainFastClassDeclaration |
@@ -65,7 +67,7 @@ FJMUModelAssociationUpdater >> update [
 	mainFastClassDeclaration accept: self
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaClassDeclaration: aFASTJavaClassDeclaration [
 
 	"resolve declaredType"
@@ -77,7 +79,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaClassDeclaration: aFASTJavaClassDecl
 	super visitFASTJavaClassDeclaration: aFASTJavaClassDeclaration
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 
 	aFASTJavaFieldAccess famixVariable ifNotNil: [ :famixVariable | 
@@ -90,7 +92,7 @@ FJMUModelAssociationUpdater >> visitFASTJavaFieldAccess: aFASTJavaFieldAccess [
 			(self resolveFamixScopeContainerOf: aFASTJavaFieldAccess) ]
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInvocation [
 
 	| famixJavaInvocation parentBehavior |
@@ -135,12 +137,12 @@ FJMUModelAssociationUpdater >> visitFASTJavaMethodInvocation: aFASTJavaMethodInv
 	^ famixJavaInvocation
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> visitFASTJavaTypeExpression: aFASTJavaTypeExpression [
 	self flag: #'Not supported yet'
 ]
 
-{ #category : #'model - update' }
+{ #category : 'model - update' }
 FJMUModelAssociationUpdater >> visitFASTTVariableExpression: aFASTVariableExpression [
 
 	(aFASTVariableExpression parentNode isKindOf:
